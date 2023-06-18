@@ -1,15 +1,24 @@
 {
-  "index": "Introduction",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
+  "index": "🍑 hello",
+  "first-steps": "🫐 first steps",
+  "tech": "🍓 tech notes",
+  "resources": "🍋 resources",
+  "ethics": "🍊 net-positive tech",
+  "frogs": "🥝 frogs",
   "about": {
     "title": "About",
     "type": "page"
   },
-  "contact": {
-    "title": "Contact ↗",
+  "tools": {
+    "title": "Tools ↗",
     "type": "page",
-    "href": "https://twitter.com/shuding_",
+    "href": "https://tools.juliab.dev",
+    "newWindow": true
+  },
+  "contact": {
+    "title": "Me ↗",
+    "type": "page",
+    "href": "https://juliab.dev",
     "newWindow": true
   }
 }
