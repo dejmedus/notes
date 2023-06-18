@@ -1,0 +1,78 @@
+#### delete local branch
+
+```
+checkout main
+git branch --delete <branchname>
+```
+
+#### remove git directory
+
+`rm -fr .git`
+
+#### remote origins
+
+```
+git remote add origin
+git remote remove origin
+git remote set-url origin url
+```
+
+#### pull from local branch
+
+`git pull . branch-name`
+
+#### rebase/wont push to repo with readme
+
+```
+git fetch --all
+git rebase origin/main
+```
+
+#### checkout remote branch
+
+git checkout -b new-branch origin/<branchname>
+
+`get init` initializes a local git directory
+`git status` status of staging area
+`git add <filename>` add file to staging area
+`git add .` add all files that aren’t currently staged
+`git reset` removes all files from git status staging area
+`git commit -m “change message”` commits files locally
+`git commit -m “title” -m “longer description”` add a description of changes
+
+`git log` show log of changes
+
+`git diff filename.txt` see recent changes made to code
+
+`git checkout filename.txt` roll back to previous change
+
+`git branch` lists all branches
+
+`git branch branchName` creates a new branch
+
+`git checkout branchName` move into branch
+
+`git checkout -b branchName` creates a new branch and moves into it
+
+`git checkout main` move into main
+
+#### Merging Steps
+
+`git checkout main` move into branch you want to merge another into
+`git pull origin main` pull any changes
+`git merge branchName` merges branch into branch you are in
+`git branch -d branchName` can delete local branch
+
+`git pull origin main` pulls all remote changes to main branch
+`git push origin main` pushes all your changes to remote repository
+
+#### Commit Messages
+
+[How to write a good commit message](https://cbea.ms/git-commit/)
+
+### Resources
+
+[Practical Git Guide](https://github.com/sadanandpai/git-guide)
+[GitHub Docs](https://docs.github.com/en/get-started/using-git/about-git)
+
+[Advanced Version Control](https://www.youtube.com/watch?v=Uszj_k0DGsg)

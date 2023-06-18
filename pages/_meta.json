@@ -1,22 +1,15 @@
 {
-  "index": "🍑 hello",
-  "first-steps": "🫐 first steps",
-  "tech": "🍓 tech notes",
-  "resources": "🍋 resources",
-  "ethics": "🍊 net-positive tech",
-  "frogs": "🥝 frogs",
+  "index": "hi",
+  "commands": "🫐 Commands",
+  "languages": "🍓 Languages",
+  "resources": "🍋 Resources",
+  "ethics": "🍊 Net-positive tech",
   "about": {
     "title": "About",
     "type": "page"
   },
-  "tools": {
-    "title": "Tools ↗",
-    "type": "page",
-    "href": "https://tools.juliab.dev",
-    "newWindow": true
-  },
   "contact": {
-    "title": "Me ↗",
+    "title": "Who am I? ↗",
     "type": "page",
     "href": "https://juliab.dev",
     "newWindow": true
