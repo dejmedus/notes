@@ -1,0 +1,259 @@
+## AI in Climate Action
+
+### Axis of Action
+
+- Climate science: understanding and predicting climate change
+- Mitigation: reducing or preventing greenhouse gas emissions
+- Adaptation: responding to the effects of a changing climate
+  - measuring and predicting risks
+  - strengthening adaptive capacity
+    - robustness: withstanding a range of outcomes
+    - resilience: recovery after impact
+
+### Frameworks
+
+- Climate justice: an equity-centered approach to climate change
+- Co-benefits: a holistic approach. Considering linkages between climate change and other sustainable development goals
+
+### How can ML help advance climate action?
+
+1. Distilling raw data into actionable information
+
+- Computer vision, NLP
+- Examples: mapping deforestation and carbon stock, data on building footprints, evaluating coastal flood risks, parsing corporate climate-relevant disclosures
+
+2. Optimizing complex systems
+
+- Optimization, control, reinforcement learning
+- Examples: optimizing heat/cooling, rail and transport, electrical grid responses
+
+3. Improving predictions and forecasts
+
+- Time series analysis, computer vision, bayesian methods
+- Examples: forecasting solar/wind power output, electricity demand, crop yield
+
+4. Accelerating scientific discover
+
+- generative models, active learning, reinforcement learning, graph neural networks
+- Examples: identify candidate materials, algorithms for fusion reactors
+
+5. Accelerating time-intensive simulations
+
+- physics-informed ML, computer vision, interpretableML, casual ML
+- Examples: superresolution of predictions from climate models,simulating car aerodynamics, speed up planning models for electrical grids
+
+### Framework to evaluate ML applications
+
+- Is ML needed?
+- What is the scope?
+- What is the time horizon (immediacy of impact)
+- Likelihood that a solution can be found
+- Feasibility to be deployed
+- Potential side effects
+
+### Key considerations
+
+- ML is not always relevant
+- High-impact applications are often not "flashy"
+- Sophisticated algorithms are not always required
+- Requires interdisciplinary collaboration
+- Equitability: empower stakeholders
+
+### Path to impact
+
+> "It's important to understand how your ML algorithm is situated within its broader pathway to impact" - Priya Donti
+
+#### Data and metrics
+
+Domain identification => project scoping => development => analysis
+
+Data sets: collection, annotation, collation, inference, and/or licensing
+Evaluation metrics: requires involvement from stakeholders
+
+🔗
+
+CCAI dataset wishlist
+Lacuna fund for climate datasets
+NeurIPS published datasets
+
+#### Responsible AI
+
+- Mitigating biases in data and models, ensure we don't replicate historic biases
+- Trustworthiness and accountability
+- Centering equity and climate justice
+- Access/benefit is democratized
+- Avoiding digital colonialism: don't take/use data from communities that will not get any benefit from/stake in the project. Or exploiting privacy regulations.
+
+#### Stakeholder engagement
+
+Stakeholders may include researchers, industry, users, policymakers, communities.
+
+🔗 Arnstein's ladder of citizen participation
+
+### MLs impact
+
+#### MLs carbon footprints
+
+- Computation and hardware
+  - operational emissions: energy consumed during computation. Can be addressed with more efficient hardware, better cooling, or re-use of waste heat. Also, renewable energy.
+- System-level impact
+
+Framework for evaluation
+Computation: Measure, reduce where possible
+Application: Quantify and evaluate, be transparent with stakeholders (be careful with "greenwashing")
+
+🔨 ML CO2 impact, codecarbon, carbontracker for huggingface, etc.
+
+#### Ways to get involved
+
+**Communities & events**
+
+- _Energy_: ACM e-Energy, IEEE Power & Energy, PSCC, BuildSys, AI.EPRI
+- _Land use_: GRSS_IEEE, Intrenation Society of Precision Ag, Restor, Global Forest Watch
+- _Climate & Earth science_: Climate Informatics, AGU/EGU, Phi-Week
+- _Biodiversity_: AI for Conservation slack, WILDLABS, GEO BON,
+- _General_: CompSustNet
+
+**Datasets & challenges**
+
+wiki.climagechange.ai + tutorials
+
+**Policy**
+
+Links: Climate change and ai recs for government policy
+
+---
+
+## Intro to Climate Change.
+
+Kamal Kapadia - Terra.do
+
+- Risks of adverse effects of climate change will increase above 1.5C of global warming.
+
+> "There is **no** substitute for mitigation (reducing emissions/achieving net zero)"
+
+- Warming will only stop at zero or net-zero emissions
+- cross-cutting levers:
+  - politics & activism
+  - policies
+  - laws & regulation
+  - finance
+  - corporate sustainability
+  - communications
+  - education
+- We need to center climate justice in the climate change convo
+
+---
+
+🔗
+
+- world weather attribution - severe weather events caused by climate change
+- ipcc Sixth Assessment Report, update on everything known about climate change (UN authoritative climate science)
+- project drawdown - climate solutions by sector
+
+🔭
+
+What will your story be in 2045 when climate change is solved?
+One courageous act that will be part of your story
+
+---
+
+## Intro to ML. Rasika Bhalerao - Northeastern University
+
+### What is machine learning
+
+The science of getting computers to act without explicitly programmed. Machines learn based on data.
+
+### Supervised learning
+
+Learning to predict or classify labels based on labelled input data. Copy the same pattern.
+
+Once you have a model you can:
+
+- Evaluate with the test dataset and see how well the model preforms
+- Predict based on unseen real world data
+
+#### k-nearest neighbours algorithm
+
+check the k instances in the training data that are closest to your new instance
+
+Classification: categorical labels - choose the majority of values
+Regression: continuous labels - choose the mean/median of those values
+
+#### Linear Regression
+
+When you have a x and a y, we want to find the (straight) line between them.
+
+Trying to achieve the smallest mean squared error between the prediction and ground proof (data and the line)
+
+Could also be a polynomial fitting (not straight line)
+
+Underfitting - too straight
+Overfitting - too squiggly
+
+We want this to follow the _general_ shape of the data
+
+As the model gets better, the training accuracy will go up and the testing accuracy will go down.
+
+Cross-validation prevents overfitting. Split the training set into training and validation (to measure RSS).
+
+Classification: logistic Regression
+
+Other supervised classifiers:
+
+- decision tree
+- support vector machines (separates things with the most space)
+- naive bayes (probabilities)
+- neural network (computation-heavy)
+
+⭐ Do not re-implement these algorithms yourself
+
+🔨
+
+- scikit-learn
+- pytorch
+- tensorflow
+
+### Unsupervised learning
+
+Finding patterns and commonalities in unlabeled data. Group data.
+
+Flat clustoring algorithm
+
+- iteratively refine
+  Hierarchial
+- tree structure
+
+K-means the most popular clustering algorithm
+
+- usually a baseline
+- randomly assign, and then iteratively tweak for accuracy
+- it doesn't like outliers (can mess up the cluster centers)
+
+Hierarchial clustering
+
+- produces nested clusters organized in a tree
+- visualized as a dendogram?
+
+### Reinforcement
+
+Learning well-performing behavior from state observations and rewards.
+
+You want to balance exploitation (use knowledge you already have) and exploration (take a chance on actions, even if you don't already know they perform well)
+
+### Data Types
+
+- Continuous
+- Discrete
+- Categorical
+
+  - Binary
+  - Ordinal
+
+- Tabular (rows and cols)
+- Time series (time/order of data)
+- Graph/Network
+- Images
+- Language / text
+
+🔭 How to determine the best option.
