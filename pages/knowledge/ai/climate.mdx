@@ -1,14 +1,25 @@
+import { Tools, Links, Prompt, Star } from "@/components/Callouts/Callouts";
+import Quote from "@/components/Quote/Quote";
+
 ## AI in Climate Action
 
 ### Axis of Action
 
-- Climate science: understanding and predicting climate change
+- Knowledge Building: understanding and predicting climate change
 - Mitigation: reducing or preventing greenhouse gas emissions
 - Adaptation: responding to the effects of a changing climate
   - measuring and predicting risks
   - strengthening adaptive capacity
     - robustness: withstanding a range of outcomes
     - resilience: recovery after impact
+
+<Tools
+  list={[
+    ["CCAI dataset wishlist", "google.com"],
+    ["Lacuna fund for climate datasets", "google.com"],
+    ["NeurIPS published datasets", "google.com"],
+  ]}
+/>
 
 ### Frameworks
 
@@ -61,20 +72,25 @@
 
 ### Path to impact
 
-> "It's important to understand how your ML algorithm is situated within its broader pathway to impact" - Priya Donti
+<Quote
+  text="It's important to understand how your ML algorithm is situated within its broader pathway to impact"
+  author="Priya Donti"
+/>
 
 #### Data and metrics
 
-Domain identification => project scoping => development => analysis
+<Star text="Domain identification => project scoping => development => analysis" />
 
 Data sets: collection, annotation, collation, inference, and/or licensing
 Evaluation metrics: requires involvement from stakeholders
 
-🔗
-
-CCAI dataset wishlist
-Lacuna fund for climate datasets
-NeurIPS published datasets
+<Tools
+  list={[
+    ["CCAI dataset wishlist", "google.com"],
+    ["Lacuna fund for climate datasets", "google.com"],
+    ["NeurIPS published datasets", "google.com"],
+  ]}
+/>
 
 #### Responsible AI
 
@@ -88,7 +104,7 @@ NeurIPS published datasets
 
 Stakeholders may include researchers, industry, users, policymakers, communities.
 
-🔗 Arnstein's ladder of citizen participation
+<Links list={[["Arnstein's ladder of citizen participation", "google.com"]]} />
 
 ### MLs impact
 
@@ -102,7 +118,13 @@ Framework for evaluation
 Computation: Measure, reduce where possible
 Application: Quantify and evaluate, be transparent with stakeholders (be careful with "greenwashing")
 
-🔨 ML CO2 impact, codecarbon, carbontracker for huggingface, etc.
+<Tools
+  list={[
+    ["ML CO2 impact", "google.com"],
+    ["codecarbon", "google.com"],
+    ["carbontracker for huggingface", "google.com"],
+  ]}
+/>
 
 #### Ways to get involved
 
@@ -126,8 +148,6 @@ Links: Climate change and ai recs for government policy
 
 ## Intro to Climate Change.
 
-Kamal Kapadia - Terra.do
-
 - Risks of adverse effects of climate change will increase above 1.5C of global warming.
 
 > "There is **no** substitute for mitigation (reducing emissions/achieving net zero)"
@@ -145,115 +165,18 @@ Kamal Kapadia - Terra.do
 
 ---
 
-🔗
+<Links
+  list={[
+    ["world weather attribution", "google.com"],
+    ["ipcc Sixth Assessment Report", "google.com"],
+    ["project drawdown", "google.com"],
+  ]}
+/>
 
-- world weather attribution - severe weather events caused by climate change
-- ipcc Sixth Assessment Report, update on everything known about climate change (UN authoritative climate science)
-- project drawdown - climate solutions by sector
-
-🔭
-
-What will your story be in 2045 when climate change is solved?
-One courageous act that will be part of your story
+<Prompt text="What will your story be in 2045 when climate change is solved? Think about one courageous act that will be part of your story" />
 
 ---
 
-## Intro to ML. Rasika Bhalerao - Northeastern University
+#### Citations
 
-### What is machine learning
-
-The science of getting computers to act without explicitly programmed. Machines learn based on data.
-
-### Supervised learning
-
-Learning to predict or classify labels based on labelled input data. Copy the same pattern.
-
-Once you have a model you can:
-
-- Evaluate with the test dataset and see how well the model preforms
-- Predict based on unseen real world data
-
-#### k-nearest neighbours algorithm
-
-check the k instances in the training data that are closest to your new instance
-
-Classification: categorical labels - choose the majority of values
-Regression: continuous labels - choose the mean/median of those values
-
-#### Linear Regression
-
-When you have a x and a y, we want to find the (straight) line between them.
-
-Trying to achieve the smallest mean squared error between the prediction and ground proof (data and the line)
-
-Could also be a polynomial fitting (not straight line)
-
-Underfitting - too straight
-Overfitting - too squiggly
-
-We want this to follow the _general_ shape of the data
-
-As the model gets better, the training accuracy will go up and the testing accuracy will go down.
-
-Cross-validation prevents overfitting. Split the training set into training and validation (to measure RSS).
-
-Classification: logistic Regression
-
-Other supervised classifiers:
-
-- decision tree
-- support vector machines (separates things with the most space)
-- naive bayes (probabilities)
-- neural network (computation-heavy)
-
-⭐ Do not re-implement these algorithms yourself
-
-🔨
-
-- scikit-learn
-- pytorch
-- tensorflow
-
-### Unsupervised learning
-
-Finding patterns and commonalities in unlabeled data. Group data.
-
-Flat clustoring algorithm
-
-- iteratively refine
-  Hierarchial
-- tree structure
-
-K-means the most popular clustering algorithm
-
-- usually a baseline
-- randomly assign, and then iteratively tweak for accuracy
-- it doesn't like outliers (can mess up the cluster centers)
-
-Hierarchial clustering
-
-- produces nested clusters organized in a tree
-- visualized as a dendogram?
-
-### Reinforcement
-
-Learning well-performing behavior from state observations and rewards.
-
-You want to balance exploitation (use knowledge you already have) and exploration (take a chance on actions, even if you don't already know they perform well)
-
-### Data Types
-
-- Continuous
-- Discrete
-- Categorical
-
-  - Binary
-  - Ordinal
-
-- Tabular (rows and cols)
-- Time series (time/order of data)
-- Graph/Network
-- Images
-- Language / text
-
-🔭 How to determine the best option.
+- [Kamal Kapadia - Intro to Climate Change. CCAI Summer School, 2023](link-to-full-reference)
