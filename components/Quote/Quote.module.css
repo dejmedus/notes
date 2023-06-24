@@ -1,0 +1,32 @@
+.quote {
+  margin: 1em 0;
+  font-weight: 500;
+  width: fit-content;
+  font-size: 1.1em;
+}
+
+/* https://stackoverflow.com/questions/48645089/displaying-quotes-before-and-after-text */
+.quote blockquote {
+  margin-right: 1.6em;
+  margin-bottom: 0.1em;
+}
+.quote blockquote:before {
+  content: open-quote;
+}
+
+.quote blockquote:after {
+  content: close-quote;
+}
+
+.quote blockquote:before,
+.quote blockquote:after {
+  font-size: 1.4em;
+  padding: 0 0.1em;
+}
+/*  */
+
+.quote .author {
+  display: flex;
+  justify-content: flex-end;
+  font-style: italic;
+}
