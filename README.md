@@ -16,5 +16,4 @@ Uses the Nextjs + [Nextra](https://nextra.site) template.
   - [TypeScript](./pages/languages/typescript/index.mdx)
   - [Python](./pages/languages/python/index.mdx)
 - [Resources](./pages/resources/index.mdx)
-- [Net-Positive Tech](./pages/ethics/index.mdx)
 
