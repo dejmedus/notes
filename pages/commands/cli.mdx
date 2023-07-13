@@ -1,0 +1,104 @@
+import { Star } from "@/components/Callouts/Callouts.tsx";
+
+## Basics
+
+`ctrl+u` deletes line
+`alt+click` move cursor in line
+`ctrl+a` move to beginning of line
+`ctrl+e` move to end of line
+`ctrl+l or clear` clears screen
+`ctrl+d or exit` exit terminal
+
+### zsh/bash/Unix
+
+`man commandName` info on command. eg. man find
+`whatis commandName` simplified info on command
+`whereis executableName` returns path to executable, eg. whereis pyton3
+`curl cheat.sh/commandName` cheatsheet with instructions on the commands usage
+`whoami` shows username
+`cat filname` displays file content in cli
+`cat file*` displays files with names starting with file
+`cat < -` adding < before filename allows you to access files named with special chars like ‘i’
+`cat “filename w spaces”` adding quotation marks allows you to access files with spaces in the name
+`cat ./*` all files in folder (allows you to find files that begin with special chars
+`cat file1 file2` displays multiple files content in cli
+`cat file1 file2 > newcombinedfile` creates a new combined file
+`cat < file1 > file2` copies file1 to file2
+`cat filename | fmt -w 20` fmt—format. -w width. Display file content with width of 20 chars
+`cat -n filename` prints line numbers
+`Top` real time view of CPU usage and processes
+`ps` process - any instance of a program, each process has a unique process id
+`ps -ef` list all processes
+`lsof -i tcp:3000` checks what is running/listening on port
+`kill -15 PID` TERM the process at process id
+`kill -3 PID` QUIT the process at process id
+`killall processName` ends all processes with name
+`pwd` present working directory
+`pwd -P` current full directory path
+`ls` list shows files in current directory
+`ls -a` shows **all** files, including secret
+`ls -l` shows **long format** info on files in current directory file permissions, user, the group the user belongs too, the date of creation
+`cd /pathname` change directory
+`cd ..` navigates up to the current directory’s parent directory
+`cd` navigate to the home directory
+`find . -name src -type d` find directory with name src
+`find . -path '*/folderName/*.py' -type f` find all of type files that have a in a folder
+`du fileName -c` estimate file size in bytes
+`open file\ name.txt` opens ‘file name.txt’ ‘**\ ‘ allows for a space**
+`open file*` opens all files beginning with ‘file’ eg. file.txt or file243.js **\* is a wildcard**
+`open file?` opens all files beginning with ‘file’ and ending in **one wild card**. eg. file2 of fileA
+`open -a /Applications/AppName.app` open file with application
+`open -a ‘Google Chrome’ websiteAdress` open file in browser
+`open `pwd``opens 'present working directory'`open .`open current folder`code .`opens directory in VSCode`mkdir directoryName`creates a directory/folder`mkdir .directoryName`creates a secret directory/folder`mkdir -p directoryName/nestedDirectoryName`creates nested directory`touch fileName.html`creates file`touch filename{1,2,3,4}.html`creates 4 filename.html files`touch filename{1..4}.html`creates 4 filename.html files`touch .secretFile.html` creates hidden file`cp copiedFile.txt pastedFile.text`copies a file`cp -Rv copiedDirectory pastedDirectory`copies a directory`rm fileName.text`deletes file`rm \*`deletes all files in directory`rmdir directoryName`deletes directory `rm -rf directoryName`deletes directory and everything inside it`mv path/oldName.txt path/newName.txt`renames a file or directory`ls -v | cat -n | while read n f; do mv -n "$f" "$n.ext"; done`renames all files in directory with incrementing numbers (1, 2, 3, 4…)`diff file1 file2`compares differences between files`file filename`determines filetype`head filename`outputs the first 10 lines of a file`tail filename`outputs the last 10 lines of a file`sort filename`sorts lines of a file alphabetically`sort filename | uniq -c`sort lines, output  duplicate lines only once, -c will display how many instances of the line there was`sort filename | uniq -u`return only unique lines`wc filename`outputs how many lines, words, and characters are in a file`>`redirect output to file(copy)`>>`append output onto file`<`**r**ead input from a file`|`piping, use the output from left side program as input for right side program`grep pattern filename`looks for text inside files. eg. grep admin /desktop/folder`grep -B 0 -A 5 'searchWord' filename`return the line with the search word and x lines before (-B) and x lines after`grep -C 2 foo README.txt`return the line and the same amount of lines before and after`grep -f file1 file2`compares and returns similar lines`grep "YOUR SEARCH STRING" filename > output-file`copies (> means redirect) grep results into output-file`grep -i pattern filename`ignores word case`grep -r pattern filename`searches all files under the specified directory`egrep ‘condition’ filename`(grep -E) output lines containing condition. eg. **egrep ‘practice|PRACTICE’ filename** returns all lines containing the word practice`fgrep ‘condition’ filename`(grep -F) find the exact string ‘condition’ in file`sed -n 5p file`print one line of file`sed ‘word’ file`removes the word from file`sed '7d;10d;11d' file1.txt > file2.txt`removes multiple lines from file, results to file2`file filename`return file type`gzip filename.txt`compress file`gzcat filename`allows you to view a compressed file without unzipping it`gunzip filename.gz`decompress file (must be a .gz)
+`tar -xvf filename`decompresses tar file`bzip2 -d filename.bz2`decompressed bzip2 file (must be a bz2)`convert image.**{**png,jpg**}`** convert file
+`wget file` downloads file
+`nslookup websitename.com` lookup and IP address http://142.251.215.238:80 Google.com
+`ping [websitename.com](http://websitename.com)` get IP address http://142.251.211.228:80 Google.com
+
+### HTTP request
+
+<Star text="**client URL** is a command line tool that developers use to transfer data to and from a server" />
+
+`-H` headers
+`-X` request
+`-d` data
+
+```
+curl -H "X-Internal-Challenge: secret-key" -H "Content-Type: application/json" -X POST http://localhost:3000/ -d '{"payload"{"url":"https://demo.appwrite.io/","method":"GET","headers":{"x-client-version":"1.0.0"},"body":""}}'
+```
+
+### Unix file permission
+
+`chown` change owner `chown -options userName:groupName filename`
+`chmod` change mode, allows users to change the read, write, and execute permissions for files and folders
+`ls -l filename` view info returns permissions. eg. `-rw-r--r--@` **-** regular filetype, **rw-** user can read and write, **r—** groups and others can only read
+
+| filetype    | user        |
+| ----------- | ----------- |
+| - file      | r read 4    |
+| d directory | w write 2   |
+| i link      | x execute 1 |
+
+#### Three types of users:
+
+**User** Person who has created the file.
+**Group** Group of other users who share similar privileges as that of the owner.
+**Others** Other members who have access to the path where you have kept the files.
+
+#### Permission level options:
+
+- 4 Read Permission
+- 2 Write Permission
+- 1 Execute Permission
+- 0 No permission
+
+**Calculated** (user read + user write + user execute)(group read + group write…)(others…)
+
+```
+# full permission for all
+chmod 777 filename.txt
+
+# USER: 4+2+1 = 7 GROUP: 4+2 = 6 OTHERS: 0
+# USER: Full GROUP: read and write OTHERS: none
+chmod 760 filename.txt
+```
