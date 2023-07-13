@@ -1,30 +1,28 @@
 ### VIM
 
-Vim is a keyboard-only text editor, no mouse. You may come across it when prompted to make commit messages during git merges.
+Vim is a keyboard-only text editor. Its used when making commit messages during git merges. To use Vim:
 
-Create a vim file `vim <filename>`
+1. Create a vim file `vim filename`
+2. Move around the file with the arrow keys or `h, j ,k, l`
+3. Switch between visual, insert, or normal mode with keys `v`, `i`, and `esc`
 
-Move around the file with the arrow keys or `h, j ,k, l`
+#### Modes
 
-Switch between visual, insert, or normal mode with keys `v`, `i`, and `esc`
+- `v` visual mode _read file_
+- `i` insert mode _edit file_
+  - `x` delete characters
+  - `dd` delete entire line
+  - `u` undo
+  - `+p` paste
+- `esc` command/normal mode - use file commands
 
-`v` visual mode - read file
-
-`i` insert mode — edit file
-
-- `x` delete characters
-- `dd` delete entire line
-- `u` undo
-- `+p` paste
-
-`esc` command/normal mode - use file commands
+#### Commands
 
 - `:set number` add numbers to vim ui
 - `:2` navigate to line 2
 - `:!node` run with node
 - `:help` see commands
-
-- `:q` quit — changes haven’t been made
+- `:q` quit — changes haven\’t been made
 - `:q!` quit and discard changes
 - `:w` save changes
 - `:wq` write the changes (save) and quit
