@@ -12,8 +12,8 @@ Uses the Nextjs + [Nextra](https://nextra.site) template.
   - [Vim](./pages/commands/vim.mdx)
   - [VS Code](./pages/commands/vsc.mdx)
 - [Languages](./pages/languages/index.mdx)
-  - [JavaScript](./pages/languages/javascript/index.mdx)
-  - [TypeScript](./pages/languages/typescript/index.mdx)
-  - [Python](./pages/languages/python/index.mdx)
+  - [JavaScript](./pages/languages/JavaScript/index.mdx)
+  - [TypeScript](./pages/languages/TypeScript/index.mdx)
+  - [Python](./pages/languages/Python/index.mdx)
 - [Resources](./pages/resources/index.mdx)
 
