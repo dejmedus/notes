@@ -17,6 +17,7 @@ import { Star } from "@/components/Callouts/Callouts.tsx";
 - `whatis commandName` simplified info on command
 - `whereis executableName` returns path to executable _whereis pyton3_
 - `whoami` shows username
+- `exit` exit a shell session
 
 #### Navigation
 
@@ -25,9 +26,9 @@ import { Star } from "@/components/Callouts/Callouts.tsx";
 - `ls` list shows files in current directory
 - `ls -a` shows **all** files, including secret
 - `ls -l` shows **long format** info on files in current directory file permissions, user, the group the user belongs too, the date of creation
-- `cd /pathname` change directory
-- `cd ..` navigates up to the current directory’s parent directory
-- `cd` navigate to the home directory
+- `cd` navigates to the home directory
+- `cd /path/to/directory` change directory
+- `cd ..` navigates up one level in the directory tree
 
 #### File Commands
 
@@ -178,7 +179,7 @@ import { Star } from "@/components/Callouts/Callouts.tsx";
 # full permission for all
 chmod 777 filename.txt
 # USER: 4+2+1 = 7 GROUP: 4+2 = 6 OTHERS: 0
-# USER: full GROUP: read and write OTHERS: none
+# USER: read, write, execute GROUP: read, write OTHERS: none.
 chmod 760 filename.txt
 
 ```

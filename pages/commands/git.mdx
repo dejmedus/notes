@@ -1,6 +1,6 @@
 ### Git & GitHub
 
-- `get init` initializes a local git directory
+- `git init` initializes a local git directory
 - `rm -fr .git` removes a local git directory
 - `git status` status of staging area
 - `git log` show log of changes
@@ -25,21 +25,22 @@
 
 ### Local branches
 
-- `git pull . branch-name` pull from local branch
-- `checkout main` then `git branch --delete <branchname>` delete local branch
+- `git checkout main` then `git branch -D <branchname>` delete local branch
 
 ### Remote branches
 
 #### Origins
 
-- `git remote add origin` add remote origin
+- `git remote add origin <repository-url>` add remote origin
 - `git remote remove origin` remove remote origin
 - `git remote set-url origin url` update remote origin
+- `git remote -v` view connected remote repositories
 
 #### Pull and push
 
 - `git pull origin main` pull remote main branch into branch
 - `git push origin main` push your branch to the remote repository main branch
+- `git push origin branchName` push your branch to the remote repository
 - `git checkout -b new-branch origin/branchname` checkout remote branch, good for testing PRs
 
 ### Problems / Solutions
