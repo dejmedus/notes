@@ -1,0 +1,26 @@
+{
+  "open": [
+    {
+      "tab": "git",
+      "commands": ["git branch"],
+      "description": "Display the current branch"
+    },
+    {
+      "tab": "frontend",
+      "commands": ["npm run dev"],
+      "description": "Run the app"
+    }
+  ],
+  "close": [
+    {
+      "tab": "git",
+      "commands": ["*CLOSE"],
+      "description": "Close the terminal"
+    },
+    {
+      "tab": "frontend",
+      "commands": ["*STOP", "*CLOSE"],
+      "description": "Close the terminal"
+    }
+  ]
+}
