@@ -4,13 +4,7 @@
   "languages": "🍓 Languages",
   "resources": "🍊 Resources",
   "about": {
-    "title": "About",
+    "title": "about",
     "type": "page"
-  },
-  "contact": {
-    "title": "Who am I? ↗",
-    "type": "page",
-    "href": "https://juliab.dev",
-    "newWindow": true
   }
 }
