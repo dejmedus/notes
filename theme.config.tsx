@@ -6,9 +6,15 @@ const config: DocsThemeConfig = {
   project: {
     link: "https://github.com/dejmedus/notes",
   },
-  docsRepositoryBase: "https://github.com/dejmedus/notes",
+  docsRepositoryBase: "https://github.com/dejmedus/notes/blob/main",
   footer: {
     text: "notes",
+  },
+  feedback: {
+    content: "Feedback →",
+  },
+  editLink: {
+    text: "View on GitHub",
   },
   useNextSeoProps() {
     const { asPath } = useRouter();
