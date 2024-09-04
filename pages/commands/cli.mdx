@@ -39,11 +39,11 @@ import { Star } from "@/components/Callouts/Callouts.tsx";
 
 #### Open files
 
-- `open file\ name.txt` opens ‘file name.txt’ ‘**\ ‘ allows for a space**
-- `open file*` opens all files beginning with ‘file’ eg. file.txt or file243.js **\* is a wildcard**
-- `open file?` opens all files beginning with ‘file’ and ending in **one wild card**. eg. file2 of fileA
+- `open file\ name.txt` opens file name.txt
+- `open file*` opens all files beginning with "file" e.g., file.txt or file243.js **\*** is a wildcard
+- `open file?` opens all files beginning with "file" and ending in **one wild card**. e.g., file2 or fileA
 - `open -a /Applications/AppName.app` open file with application
-- `open -a ‘Google Chrome’ websiteAddress` open file in browser
+- `open -a "Google Chrome" websiteAddress` open file in browser
 - `open `pwd`` opens 'present working directory'
 - `open .` open current folder
 - `code .` opens directory in VSCode
@@ -83,29 +83,29 @@ import { Star } from "@/components/Callouts/Callouts.tsx";
 #### Find, sort, and search files
 
 - `find . -name src -type d` find directory with name src
-- `find . -path '*/folderName/*.py' -type f` find all of type files that have a in a folder
+- `find . -path  "*/folderName/*.py" -type f` find all of type files that have a in a folder
 - `du fileName -c` estimate file size in bytes
 - `sort filename` sorts lines of a file alphabetically
 - `sort filename | uniq -c` sort lines, output duplicate lines only once, -c will count lines
 - `sort filename | uniq -u` return only unique lines
 - `wc filename` outputs how many lines, words, and characters are in a file
 - `grep pattern filename` looks for text inside files. eg. grep admin /desktop/folder
-- `grep -B 0 -A 5 'searchWord' filename` return the line with the search word and x lines before (-B) and x lines after
+- `grep -B 0 -A 5 "searchWord" filename` return the line with the search word and x lines before (-B) and x lines after
 - `grep -C 2 foo README.txt` return the line and the same amount of lines before and after
 - `grep -f file1 file2` compares and returns similar lines
 - `grep "YOUR SEARCH STRING" filename > output-file` copies (> means redirect) grep results into output-file
 - `grep -i pattern filename` ignores word case
 - `grep -r pattern filename` searches all files under the specified directory
-- `egrep ‘condition’ filename` (grep -E) output lines containing condition. eg. **egrep ‘practice|PRACTICE’ filename** returns all lines containing the word practice
-- `fgrep ‘condition’ filename` (grep -F) find the exact string ‘condition’ in file
+- `egrep "condition" filename` (grep -E) output lines containing condition. eg. **egrep "practice|PRACTICE" filename** returns all lines containing the word practice
+- `fgrep "condition" filename` (grep -F) find the exact string "condition" in file
 
 #### Compare, rename, and manipulate files
 
 - `ls -v | cat -n | while read n f; do mv -n "$f" "$n.ext"; done` renames all files in directory with incrementing numbers
 - `diff file1 file2` compares differences between files
 - `sed -n 5p file` print one line of file
-- `sed ‘word’ file` removes the word from file
-- `sed '7d;10d;11d' file1.txt > file2.txt` removes multiple lines from file, results to file2
+- `sed "word" file` removes the word from file
+- `sed "7d;10d;11d" file1.txt > file2.txt` removes multiple lines from file, results to file2
 
 #### Compress and download files
 
