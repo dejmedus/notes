@@ -4,20 +4,38 @@ import { Star } from "@/components/Callouts/Callouts.tsx";
 
 ### Basics
 
-- `ctrl + u` deletes line
-- `alt + click` move cursor in line
+#### Navigation
+
+- `option + click` move cursor inside line
 - `ctrl + a` move to beginning of line
 - `ctrl + e` move to end of line
-- `ctrl + l or clear` clears screen
-- `ctrl + d or exit` exit terminal
+
+#### Editing
+
+- `ctrl + u` deletes line
+- `ctrl + k` deletes from cursor to end of line
+- `ctrl + w` deletes word before cursor
+- `cmd + f` search terminal
+
+#### History
+
+- up arrow key shows previous command
+- down arrow key shows next command
+- `ctrl + c` stops current command
+- `ctrl + r` search command history
+- `history` shows history of commands
+
+#### Clear
+
+- `ctrl + l` or `clear` clears screen
+- `ctrl + d` or `exit` exit terminal
 
 ### Shell
 
-- `man commandName` info on command _man find_
+- `man commandName` info on command _man find_ **q to quit**
 - `whatis commandName` simplified info on command
-- `whereis executableName` returns path to executable _whereis pyton3_
+- `whereis executableName` returns path to executable _whereis python3_
 - `whoami` shows username
-- `exit` exit a shell session
 
 #### Navigation
 
@@ -39,9 +57,9 @@ import { Star } from "@/components/Callouts/Callouts.tsx";
 
 #### Open files
 
-- `open file\ name.txt` opens file name.txt
-- `open file*` opens all files beginning with "file" e.g., file.txt or file243.js **\*** is a wildcard
-- `open file?` opens all files beginning with "file" and ending in **one wild card**. e.g., file2 or fileA
+- `open file\ name.txt` opens "file name.txt" **\ allows for a space**
+- `open file*` opens all files beginning with "file" eg. file.txt or file243.js **\* is a wildcard**
+- `open file?` opens all files beginning with "file" and ending in **one wild card**. eg. file2 of fileA
 - `open -a /Applications/AppName.app` open file with application
 - `open -a "Google Chrome" websiteAddress` open file in browser
 - `open `pwd`` opens 'present working directory'
@@ -187,4 +205,5 @@ chmod 760 filename.txt
 ### Resources
 
 - [Command Line Murder Mystery](https://github.com/veltman/principles) CLI whodunit
+- [Over the Wire](https://overthewire.org/wargames/bandit/) wargames to learn shell basics
 - [Awesome Shell](https://github.com/alebcay/awesome-shell) curated list of awesome command-line frameworks, toolkits, and guides
