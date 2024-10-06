@@ -1,4 +1,5 @@
 {
+  "npm": "npm",
   "tools": {
     "title": "TypeScript + React ↗",
     "type": "page",

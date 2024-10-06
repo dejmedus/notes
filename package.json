@@ -17,9 +17,9 @@
   },
   "homepage": "https://github.com/dejmedus/notes#readme",
   "dependencies": {
-    "next": "^13.0.6",
-    "nextra": "latest",
-    "nextra-theme-docs": "latest",
+    "next": "^13.2",
+    "nextra": "^2",
+    "nextra-theme-docs": "^2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
