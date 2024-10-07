@@ -9,3 +9,6 @@
 .link:hover {
   opacity: 0.8;
 }
+.image {
+  padding: 1em 0;
+}
