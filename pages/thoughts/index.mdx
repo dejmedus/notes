@@ -1,0 +1,167 @@
+import Image from "next/image";
+
+## Your Yard, Their Garden
+
+YourYard is a web and mobile app that allows users to rent or rent out backyard garden space.
+
+In June 2024, gardening beat out computers, photography, making music, and writing - among others - in a ranking of most popular hobbies in the United States.
+
+However, only “51% [of Americans] live in households with any type of access to a garden, including access to someone else’s garden.”
+
+This access limitation could be solved, in part, with a garden space share platform.
+
+> **Sources:**
+>
+> - Most popular hobbies & activities in the U.S. 2024, [Statista](https://www.statista.com/forecasts/997050/most-popular-hobbies-and-activities-in-the-us#:~:text=When%20it%20comes%20to%20the,consumers%20who%20like%20to%20read)
+> - Garden Access, Race and Vegetable Acquisition among U.S. Adults, [National Library of Medicine](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8625112/)
+
+---
+
+### User Journeys
+
+YourYard helps connect homeowners and gardeners. Let’s take a look at how different users might interact with the platform.
+
+#### **New Gardener**
+
+**A first-time gardener might not know where to start. By providing a step-by-step process, YourYard can help them find space, book it, and start gardening without any friction.**
+
+> I’m new to gardening but want to learn. I live in an apartment and don’t have any friends and family with a backyard close to me. I want to find garden space to try out growing food.
+>
+> On the garden share app I:
+>
+> - Create a profile with:
+>   - Location
+>   - Bio with an about me section
+>   - Photo
+> - Add credit card details
+> - Filter the map for my garden preferences
+> - Browse available backyard spaces in nearby neighborhoods
+> - Read through descriptions of each space (access hours, price, size, etc.)
+> - Message the host to ask questions
+> - Confirm the booking
+> - Visit the rented garden space to begin planting and gardening
+> - Pay the garden owner based on the terms of the agreement
+
+---
+
+#### **Homeowner**
+
+**For a homeowner with unused space, renting it out for gardening can be a practical and low-effort way to generate income.**
+
+> I have a backyard that I don’t use, and I’d like to make some extra income by renting it out to people who want to garden.
+>
+> On the garden share app I:
+>
+> - Create a profile with:
+>   - Location
+>   - Bio with an about me section
+>   - Photo
+> - Add my bank account details to accept payments
+> - Add credit card details to pay the listing fee
+> - List my backyard space with photos and details like size and rental price
+> - Set access hours and terms for how the space can be used
+> - Review inquiries from potential renters and message them with any questions
+> - Confirm a renter and set up payment through the platform
+> - Allow the renter access to the garden
+> - Payment is sent to my bank account
+
+---
+
+#### **Busy Individual**
+
+**Not every homeowner wants to be hands-on in maintaining a garden, but many would still appreciate a well-kept backyard.**
+
+> I love the idea of having a garden but don’t have the time to take care of it myself. I want someone to use my backyard space and maintain a garden so it looks nice during the summer.
+>
+> On the garden share app I:
+>
+> - Create a profile with:
+>   - Location
+>   - Bio with an about me section
+>   - Photo
+> - Add credit card details to pay the listing fee
+> - Fill out my garden’s listing, specifying that I’m offering the space freely in exchange for garden maintenance
+> - Set access hours and terms for how the space can be used
+> - Review potential gardeners’ profiles and chat with them about their gardening experience
+> - Make an agreement with a gardener or gardeners
+> - Enjoy a well-kept garden throughout the season without needing to do any of the work
+
+---
+
+### User Interface
+
+Here is an overview of screens that a user might interact with.
+
+#### **Homepage**
+
+Browse available garden spaces on the homepage. Filter attributes like location, price, and size.
+
+<Image
+  className="image"
+  src="/homepage.png"
+  alt="Hello"
+  width={500}
+  height={500}
+/>
+
+#### **Listing**
+
+View detailed information about a specific garden space, including photos, price, size, and access hours.
+
+<Image
+  className="image"
+  src="/listing.png"
+  alt="Hello"
+  width={500}
+  height={500}
+/>
+
+#### **Profile**
+
+View a property owner’s profile, including their location, bio, and photo.
+
+<Image
+  className="image"
+  src="/account.png"
+  alt="Hello"
+  width={500}
+  height={500}
+/>
+
+---
+
+### Assumptions
+
+In order to validate the idea of a garden space share platform, we can make assumptions and test them in the following ways:
+
+1. **A large number of people either already enjoy gardening or want to start learning how to garden.**
+
+- Collect data on the number of people participating in gardening as a hobby. Review gardening trends through surveys, gardening communities, and industry reports.
+- Interview individuals across different demographics to understand their interest in gardening. Determine whether they're seasoned gardeners or if they have a desire to learn but lack the space or resources.
+- Research the total current and projected market value of gardening-related industries, such as companies that sell gardening equipment, seeds, plants, or educational tools.
+- Look into market research reports from sources like Statista to gather insights into the gardening sector’s future growth.
+
+2. **People who don’t have access to garden space would be willing to pay for it.**
+
+   - Conduct surveys of apartment residents, condo dwellers, and urban households to assess their willingness to pay for garden space. Include price brackets to understand how much they’d be willing to spend.
+   - Interview target users (e.g., apartment dwellers) to gauge interest and evaluate the perceived value of renting garden space. This can help identify what features would be most attractive (location, size, access to tools).
+   - Use Google Trends to track search volumes for gardening-related keywords over time (e.g., “buy seeds,” “garden tools,” and “rent garden space”).
+   - Review other space share platforms, like Airbnb, and study how they set prices, and how factors like reviews, location proximity, and property uniqueness change pricing.
+
+3. **Not all people who want to garden have garden space, and not all people who have a backyard want to utilize it.**
+
+   - Gather data on home ownership rates and the availability of garden space by region, including the percentage of households with backyards and those without access to outdoor space.
+   - Interview homeowners to understand why some don’t utilize their backyards (lack of time, interest, or knowledge) and assess their interest in renting the space out for others to garden.
+   - Survey individuals, gardening groups, and community garden collectives to determine how many people rely on shared spaces to garden and what obstacles prevent access to garden space, such as housing restrictions or affordability.
+
+4. **People would be willing to share garden space with others in their community.**
+
+   - Interview both gardeners and homeowners about their comfort levels with sharing garden space. Evaluate the importance of factors such as privacy, trust, and community engagement.
+   - Survey existing garden-sharing models (such as community gardens) to determine what motivates people to share spaces and what concerns or obstacles they face.
+   - Map the prevalence of current share/community garden spaces.
+
+5. **The backyard share system would be legal in most areas.**
+   - Survey municipalities and local government authorities to assess the legality of renting out backyard space. Investigate zoning laws, potential restrictions on rental use, and any permits or regulations that would apply.
+   - Research existing platforms that offer shared spaces to identify legal precedents and potential compliance issues.
+   - Look for statistics on public opinion regarding shared services like Airbnb and shared office spaces to understand potential perceptions and challenges related to backyard sharing.
+   - Consult with insurance industry members to determine potential liabilities for homeowners renting out backyard space and understand the necessary insurance coverage they would need to consider.
