@@ -1,356 +1,261 @@
-## **Variables**
+## Naming
 
-### What is a Variable?
+```python
+var_names # snake_case
+CONSTANT_VAR # UPPERCASE
 
-- In programming, a **variable** is a container for storing data. Unlike algebraic variables, which represent unknown values, programming variables hold actual data that can be changed during program execution.
+ClassNames # PascalCase
+_protected_class_attribute # single underscore
+__private_class_attribute # double underscore
+```
 
-### Memory and Variables
+## Data types
 
-- **Human Memory**: Helps us retain new skills, remember the past, and plan for the future.
-- **Computer Memory**: Functions similarly by storing and updating data. For example, a game like _Super Mario_ keeps track of variables like `time`, `score`, `level`, etc.
+```python
+name = "Alice"  # string (text)
+age = 25        # int    (whole nums)
+height = 5.5    # float  (decimal nums)
+is_true = True  # bool   (True/False)
+fruits = ["apple", "banana"]  # list
+person = { "name": "Alice", "age": 25 }  # dict
+```
 
-### Creating Variables
+### Type Checking
 
-- **Variable Creation**: Variables are created by assigning a value to a name using the **assignment operator (`=`)**.
+```python
+x = 5
+type(x) # int
+```
 
-  ```python
-  x = 22
-  ```
+### Lists
 
-  - **Explanation**: `x` is assigned the value `22`.
+```python
+fruits = ["apple", "banana"]
+fruits[0] # get
+fruits.append("cherry")  # add
+fruits.remove("banana")  # remove
+for fruit in fruits:  # loop
+    print(fruit)
+```
 
-- **Syntax**: Variable names are on the left side of the `=`, while the value is on the right.
+### Dictionaries
 
-- Unlike other languages (like JavaScript, which uses `let` or `const` to declare a variable), Python does not need explicit variable declarations.
+```python
+person = { "name": "Alice", "age": 25 }
+person["name"]  # get
+person["city"] = "New York"  # add
+person.pop("age", None)  # remove
+for key, value in person.items():  # loop
+    print(key, value)
+```
 
-### Using Variables
+## Formatting
 
-- You can **call** or **access** a variable’s value by referring to its name:
-  ```python
-  print(x)  # Output: 22
-  ```
-- **Memory Analogy**: Python searches the memory for the variable (box) labeled `x`, retrieves the value `22`, and returns it.
+#### Concatenation
 
-### Naming Variables
+```python
+username = "Alex"
+print("Welcome " + username) # Welcome Alex
+```
 
-- **Snake Case**: Separate words with underscores.
+#### f-strings
 
-  ```python
-  player_name = "Alex"
-  ```
+```python
+name = "Bob"
+print(f"Thanks {name}") # Thanks Bob
+```
 
-- **Use Descriptive Names**: Avoid vague names like `x`, `y`, `z`. Instead, use names that describe the data they hold.
+## Input
 
-  ```python
-  age = 22
-  score = 1100
-  ```
+All input is returned as a string
 
----
+```python
+name = input("Name: ")
+height = int(input("Height: "))
+```
 
-## **Variable Reassignment**
+## Conditionals
 
-- **Reassignment**: Variables can be reassigned with new values at any time.
-  ```python
-  x = 22
-  x = 1.5
-  ```
+Conditional statements include **if**, **elif**, and **else**
 
-### Real-World Examples of Reassignment
-
-- **Example 1**: Score updates in a game (e.g., _Super Mario_):
-
-  ```python
-  score = 1100
-  score = score + 100  # After earning coins
-  ```
-
-- **Example 2**: Updating a sports player's team:
-  ```python
-  lebron_james_team = "Cavaliers"
-  lebron_james_team = "Lakers"  # Reassigned in 2018
-  ```
-
----
-
-## **Data Types**
-
-### What is a Data Type?
-
-- **Data Type**: A classification that specifies which type of value a variable can hold.
-  - **Example**: The variable `age` can hold integer values like `25`, but not text values like `"twenty-five"`.
-  - **Common Data Types**: `int`, `float`, `str`, `bool`, `list`, `tuple`, `dict`.
-  - **Dynamic Typing**: Python automatically assigns data types based on the value assigned to a variable.
-  - **Type Checking**: You can check the data type of a variable using the `type()` function.
-
-### Common Data Types
-
-| Data Type | Description                              | Example Values                 |
-| --------- | ---------------------------------------- | ------------------------------ |
-| `int`     | Integer values (whole numbers).          | `5`, `1000`, `0`, `-10`        |
-| `float`   | Floating-point values (decimals).        | `3.14`, `2.718`, `0.0`         |
-| `str`     | String values (text).                    | `"Hello"`, `'World'`           |
-| `bool`    | Boolean values (`True` or `False`).      | `True`, `False`                |
-| `list`    | Ordered collection of items.             | `[1, 2, 3]`, `['a', 'b', 'c']` |
-| `dict`    | Unordered collection of key-value pairs. | `{'name': 'Alice', 'age': 25}` |
-
-## **Printing and String Formatting**
-
-### Using `print()`
-
-- The `print()` function is used to output messages or variable values to the screen.
-  ```python
-  print("Game is loading...")
-  ```
-
-### Combining Strings and Variables
-
-- **String Concatenation**:
-  ```python
-  username = "Alex"
-  print("Welcome " + username)  # Output: Welcome Alex
-  ```
-
-### f-Strings
-
-- **f-Strings** provide a cleaner way to format strings, allowing variables to be embedded directly within curly braces `{}`:
-  ```python
-  name = "Bob"
-  score = 1100
-  print(f"{name}'s score: {score}")  # Output: Bob's score: 1100
-  ```
-
-| Approach      | Example Code                   | Output         |
-| ------------- | ------------------------------ | -------------- |
-| Concatenation | `print("Welcome " + username)` | `Welcome Alex` |
-| f-String      | `print(f"Welcome {username}")` | `Welcome Alex` |
-
----
-
-## **User Input**
-
-### Using `input()`
-
-- The `input()` function allows you to capture input from the user. It always returns the input as a **string**.
-  ```python
-  response = input("How are you? ")
-  print("You said:", response)
-  ```
-
-### Type Conversion (Casting)
-
-- Since `input()` returns strings, you need to convert the input to the appropriate data type when performing calculations:
-  ```python
-  height = input("Enter your height in inches: ")
-  height = int(height)  # Convert string to integer
-  ```
-
-### Example: Simple Calculation Program
-
-- A program to calculate snowboard length based on height:
-  ```python
-  height = input("Enter your height in inches: ")
-  height = int(height)
-  snowboard_length = height * 2.54 * 0.88
-  print(f"Your recommended snowboard length is {snowboard_length} cm.")
-  ```
-
----
-
-## **Conditionals**
-
-- **Conditional statements** allow you to control the flow of your program based on boolean expressions.
-
-  ```python
-  if temperature > 75:
-      print("It's hot outside!")
-  ```
-
-- **If-Else**: Executes one block of code if the condition is true and another if it is false.
-
-  ```python
-  if temperature > 75:
-      print("It's hot!")
-  else:
-      print("It's cool!")
-  ```
-
-- **Elif** is used for multiple conditions.
-  ```python
-  if temperature > 75:
-      print("It's hot!")
-  elif temperature < 60:
-      print("It's cold!")
-  else:
-      print("It's mild.")
-  ```
-
----
+```python
+if temperature > 75:
+    print("Hot!")
+elif temperature < 60:
+    print("Cold!")
+else:
+    print("Mild")
+```
 
 ## Loops
 
-Loops allow you to repeatedly execute a block of code as long as a condition is met. Python supports two types of loops: `for` loops and `while` loops.
+### For Loops
 
-### **For Loops**
+```python
+fruits = ["apple", "banana", "cherry"]
+for fruit in fruits:
+    print(fruit) # apple, banana, cherry
 
-- **For loops** are used for iterating over a sequence (like a list, tuple, string, or range).
-- Syntax:
+for i in range(5):
+    print(i)  # 0, 1, 2, 3, 4
 
-  ```python
-  for variable in sequence:
-      # code block
-  ```
+for index, fruit in enumerate(fruits):
+    print(index, fruit) # 0 apple, 1 banana, 2 cherry
+```
 
-- **Example 1: Iterating over a list**:
+### While Loops
 
-  ```python
-  fruits = ["apple", "banana", "cherry"]
-  for fruit in fruits:
-      print(fruit)
-  # Output: apple, banana, cherry
-  ```
+```python
+while condition:
+  print("condition is True")
+```
 
-- **Example 2: Using `range()` in a for loop**:
+### Loop Control
 
-  ```python
-  for i in range(5):
-      print(i)
-  # Output: 0, 1, 2, 3, 4
-  ```
+```python
+for i in range(10):
+    if i == 5:
+        break # exits out of loop
+    print(i)  # 0, 1, 2, 3, 4
 
-- **Example 3: Using `enumerate()` in a for loop**:
-  ```python
-  for index, fruit in enumerate(fruits):
-      print(i, fruit)
-  # Output: 0 apple, 1 banana, 2 cherry
-  ```
+for i in range(5):
+    if i == 2:
+        continue # skips to next iteration
+    print(i)  # 0, 1, 3, 4
+```
 
-### **While Loops**
-
-- **While loops** repeatedly execute a block of code as long as the condition is `True`.
-- Syntax:
-  ```python
-  while condition:
-      # code block
-  ```
-
-### **Break and Continue**
-
-- **`break`**: Used to exit a loop prematurely.
-
-  - Example:
-
-  ```python
-  for i in range(10):
-      if i == 5:
-          break
-      print(i)
-  # Output: 0, 1, 2, 3, 4
-  ```
-
-- **`continue`**: Skips the rest of the code inside the loop for the current iteration and moves to the next iteration.
-  - Example:
-  ```python
-  for i in range(5):
-      if i == 2:
-          continue
-      print(i)
-  # Output: 0, 1, 3, 4
-  ```
-
-### **Iterating Over Dictionaries**
-
-- You can loop through dictionaries using `.items()` to get both the key and value.
-  - Example:
-  ```python
-  dictionary = {"name": "Alex", "age": 25}
-  for key, value in dictionary.items():
-      print(key, value)
-  # Output: name Alex, age 25
-  ```
-
-## **Boolean Logic and Operators**
-
-### Boolean Expressions
-
-- **Boolean Values**: `True` or `False`.
-  ```python
-  is_sunny = True
-  is_raining = False
-  ```
+## Boolean Logic
 
 ### Comparison Operators
 
-- Used to compare values. Returns `True` or `False`.
-  | Operator | Meaning | Example |
-  | -------- | ---------------- | ---------- |
-  | `==` | Equals | `10 == 10` |
-  | `!=` | Not Equals | `5 != 4` |
-  | `>` | Greater Than | `7 > 3` |
-  | `<` | Less Than | `3 < 7` |
-  | `>=` | Greater or Equal | `5 >= 5` |
-  | `<=` | Less or Equal | `4 <= 6` |
+```python
+==  # equal to
+!=  # not equal to
+>   # greater than
+<   # less than
+>=  # greater or equal
+<=  # less or equal
+```
 
 ### Logical Operators
 
-- **`and`**, **`or`**, and **`not`** combine boolean expressions.
-  ```python
-  if temperature > 75 and not raining:
-      print("It's a great day!")
-  ```
+Logical operators include **and**, **or**, and **not**
 
-| Operator | Example Code     | Result  |
-| -------- | ---------------- | ------- |
-| `and`    | `True and False` | `False` |
-| `or`     | `True or False`  | `True`  |
-| `not`    | `not False`      | `True`  |
+```python
+if x > 0 and x < 10:
+    print("x is between 0 and 10")
 
----
+if x < 0 or x > 10:
+    print("Outside range")
 
-## **Functions**
+is_valid = not False
+```
 
-### What is a Function?
+## Functions
 
-- A **function** is a reusable block of code that performs a specific task.
-  ```python
-  def greet(name):
-      print(f"Hello, {name}!")
-  ```
+```python
+def add(a, b):
+    return a + b
 
-### Calling a Function
+result = add(5, 3)
+print(result) # 8
+```
 
-- To **call** a function, use its name followed by parentheses and pass any required arguments:
-  ```python
-  greet("Alice")  # Output: Hello, Alice!
-  ```
+### Function Arguments
 
-### Parameters and Return Values
+Different types of function arguments include: **positional**, **default**, **keyword**, **arbitrary**, and **keyword arbitrary** arguments
 
-- Functions can accept parameters and return values.
+```python
+def area(width, height): # positional args
+    return width * height
 
-  ```python
-  def area(width, height):
-      return width * height
+area(5, 6)  # must be passed in order
 
-  print(area(4, 5))  # Output: 20
-  ```
+def area(width=5, height=5): # default args
+    return width * height
 
----
+area()  # default arg values 5, 5 are used
+area(height=6, width=5)  # keyword args can be passed in any order
 
-## Built in functions
+def area(*args):  # arbitrary args
+    return args[0] * args[1]
 
-| **Function**  | **Description**                                          | **Example**                                                     |
-| ------------- | -------------------------------------------------------- | --------------------------------------------------------------- |
-| `print()`     | Outputs data to the screen or standard output device.    | `print("Hello, World!")`                                        |
-| `input()`     | Takes input from the user (returns a string).            | `name = input("Enter your name: ")`                             |
-| `int()`       | Converts a string or float to an integer.                | `int("42")` → `42`                                              |
-| `float()`     | Converts a string or integer to a floating-point number. | `float("3.14")` → `3.14`                                        |
-| `str()`       | Converts an object to a string.                          | `str(123)` → `"123"`                                            |
-| `list()`      | Converts an iterable to a list.                          | `list("abc")` → `['a', 'b', 'c']`                               |
-| `set()`       | Converts an iterable to a set (removes duplicates).      | `set([1, 2, 2, 3])` → `{1, 2, 3}`                               |
-| `len()`       | Returns the length (number of items) in an object.       | `len("Hello")` → `5`                                            |
-| `type()`      | Returns the data type of an object.                      | `type(123)` → `<class 'int'>`                                   |
-| `sum()`       | Returns the sum of all items in an iterable.             | `sum([1, 2, 3])` → `6`                                          |
-| `round()`     | Rounds a number to a specified number of decimal places. | `round(3.14159, 2)` → `3.14`                                    |
-| `enumerate()` | Returns an iterator that produces pairs (index, value).  | `enumerate(['a', 'b', 'c'])` → `[(0, 'a'), (1, 'b'), (2, 'c')]` |
-| `range()`     | Generates a sequence of numbers.                         | `range(5)` → `[0, 1, 2, 3, 4]`                                  |
+area(5, 6)  # can pass any number of args
+area(5, 6, 7, 8) # args[2] and args[3] are unused
+
+def area(**kwargs):  # arbitrary keyword args
+    return kwargs["width"] * kwargs["height"]
+
+area(height=6, width=5)  # can pass any number of keyword args in any order
+area(width=5, potatos='round', height=6) # potatoes is unused
+```
+
+### Built-in Functions
+
+```python
+len("Hello")        # length
+type(123)           # type check
+int("42")           # convert to int
+float("3.14")       # convert to float
+str(123)            # convert to string
+round(3.14159, 2)   # round
+sum([1, 2, 3])      # sum
+```
+
+## Scope
+
+Determines the accessibility of variables, includes: **local**, **enclosing**, and **global**
+
+```python
+x = 10  # global var
+what_scope = "global"
+
+def outer():
+    y = 20  # enclosing var
+    what_scope = "enclosing"
+
+    def inner():
+        z = 30  # local var
+        what_scope = "local"
+        print(x, y, z)  # can access all higher scopes
+        print(what_scope)  # local
+
+    inner()
+    print(x, y)  # z doesnt exist in enclosing scope
+    print(what_scope)  # enclosing
+
+outer()
+print(x)  # y and z dont exist in global scope
+print(what_scope)  # global
+```
+
+### Scope Modifiers
+
+`global` and `nonlocal` can be used to modify the scope of variables
+
+```python
+global_count = 0 # global var
+
+def outer():
+    enclosing_count = 0  # enclosing var
+
+    global global_count  # modifies global var
+    global_count += 1
+
+    def inner():
+        nonlocal enclosing_count
+        enclosing_count += 1  # modifies enclosing var
+
+    inner()
+    print(enclosing_count)  # 1
+
+outer()
+print(global_count)  # 1
+```
+
+## Importing Modules
+
+```python
+from math import sqrt  # import a function
+from random import *   # import all functions
+```
