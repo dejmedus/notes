@@ -1,0 +1,48 @@
+---
+title: Gems
+---
+
+### Package Manager **RubyGems**
+
+[Documentation](https://guides.rubygems.org/)
+
+- `gem install <gem_name>` install a gem globally
+- `gem list` list all installed gems
+- `gem uninstall <gem_name>` uninstall a gem
+- `gem update` update all installed gems
+- `gem update <gem_name>` update a specific gem
+
+### Dependency Management **bundler**
+
+[Documentation](https://bundler.io/)
+
+- `gem install bundler` install bundler
+- `bundle init` init a new gemfile
+- `bundle install` install all gemfile dependencies
+- `bundle update` update dependencies
+- `bundle exec <command>` run a script `bundle exec rspec`
+- `bundle add <gem_name>` add a gem to the gemfile and install it
+- `bundle remove <gem_name>` remove a gem from the gemfile and uninstall it
+- `bundle check` verify all dependencies are installed
+
+### Version Manager **rbenv**
+
+[Documentation](https://github.com/rbenv/rbenv)
+
+- `rbenv install <version>` install a specific ruby version
+- `rbenv install --list` list all available ruby versions
+- `rbenv versions` list installed ruby versions
+- `rbenv global <version>` set a ruby version globally
+- `rbenv local <version>` set a ruby version locally for the current project
+- `rbenv uninstall <version>` remove a ruby version
+
+### Local Dev
+
+```zsh
+bundle init # create a gemfile
+bundle install # install dependencies
+
+ruby app.rb # run
+# or
+bundle exec ruby app.rb # run w bundler
+```

@@ -1,0 +1,55 @@
+---
+title: Ruby Syntax
+description: Ruby syntax examples
+---
+
+## Syntax
+
+| Code Example                               | Description                      | Output                      |
+| ------------------------------------------ | -------------------------------- | --------------------------- |
+| `'Hello, world!'`                          | string literal                   | `"Hello, world!"`           |
+| `375`                                      | integer literal                  | `375`                       |
+| `3.141528`                                 | float literal                    | `3.141528`                  |
+| `true`                                     | boolean literal                  | `true`                      |
+| `{ 'a' => 1, 'b' => 2 }`                   | hash literal                     | `{"a" => 1, "b" => 2}`      |
+| `[ 1, 2, 3 ]`                              | array literal                    | `[1, 2, 3]`                 |
+| `:sym`                                     | symbol literal                   | `:sym`                      |
+| `nil`                                      | nil literal                      | `nil`                       |
+| `17 / 5`                                   | integer division                 | `3`                         |
+| `17 / 5.0`                                 | float division                   | `3.4`                       |
+| `13.to_f`                                  | convert integer to float         | `13.0`                      |
+| `13.0.to_i`                                | convert float to integer         | `13`                        |
+| `6.even?`                                  | checks if the number is even     | `true`                      |
+| `7.odd?`                                   | checks if the number is odd      | `true`                      |
+| `"hello"[0]`                               | first character of the string    | `"h"`                       |
+| `"hello"[0..1]`                            | substring from index 0 to 1      | `"he"`                      |
+| `"hello"[0, 4]`                            | substring from index 0, length 4 | `"hell"`                    |
+| `"hello"[-1]`                              | last character of the string     | `"o"`                       |
+| `name = "Odin"; "Hello, #{name}"`          | string interpolation             | `"Hello, Odin"`             |
+| `"hello".capitalize`                       | capitalize the first letter      | `"Hello"`                   |
+| `"hello".include?("lo")`                   | checks if substring is included  | `true`                      |
+| `"hello".include?("z")`                    | checks if substring is included  | `false`                     |
+| `"hello".upcase`                           | convert to uppercase             | `"HELLO"`                   |
+| `"Hello".downcase`                         | convert to lowercase             | `"hello"`                   |
+| `"hello".empty?`                           | checks if string is empty        | `false`                     |
+| `"".empty?`                                | checks if string is empty        | `true`                      |
+| `"hello".length`                           | length of the string             | `5`                         |
+| `"hello".reverse`                          | reverse the string               | `"olleh"`                   |
+| `"hello world".split`                      | split by whitespace              | `["hello", "world"]`        |
+| `"hello".split("")`                        | split into characters            | `["h", "e", "l", "l", "o"]` |
+| `" hello, world   ".strip`                 | remove leading/trailing spaces   | `"hello, world"`            |
+| `"he77o".sub("7", "l")`                    | replace first "7" with "l"       | `"hel7o"`                   |
+| `"he77o".gsub("7", "l")`                   | replace all "7" with "l"         | `"hello"`                   |
+| `"hello".insert(-1, " dude")`              | insert substring at index        | `"hello dude"`              |
+| `"hello world".delete("l")`                | delete all "l"                   | `"heo word"`                |
+| `"!".prepend("hello, ", "world")`          | prepend strings                  | `"hello, world!"`           |
+| `5.to_s`                                   | convert integer to string        | `"5"`                       |
+| `hash = { 'a' => 1, 'b' => 2 }; hash['a']` | access value by key              | `1`                         |
+| `{ dog: 'barks' }[:dog]`                   | access value with symbol key     | `"barks"`                   |
+| `[1, 2, 3, 4, 5].first`                    | first element of the array       | `1`                         |
+| `[1, 2, 3, 4, 5].last`                     | last element of the array        | `5`                         |
+| `[1, 2, 3, 4, 5].length`                   | length of the array              | `5`                         |
+| `[1, 2, 3].push(4)`                        | add element to end               | `[1, 2, 3, 4]`              |
+| `[1, 2, 3, 4].pop`                         | remove last element              | `4`                         |
+| `[1, 2, 3].unshift(0)`                     | add element to the beginning     | `[0, 1, 2, 3]`              |
+| `[0, 1, 2, 3].shift`                       | remove first element             | `0`                         |

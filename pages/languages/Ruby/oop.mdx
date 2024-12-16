@@ -1,0 +1,246 @@
+---
+title: Ruby OOP
+---
+
+## Classes
+
+Blueprints for creating objects. They define **attributes** and **methods** that objects instantiated from the class will have. Instance variables are prefixed with `@`. Class variables are prefixed with `@@`
+
+```ruby copy
+class Person
+ @@species = "homo sapien" # class var
+  attr_accessor :name, :age # provides getter and setter methods
+
+  def initialize(name, age)
+    @name = name # instance var
+    @age = age
+  end
+
+
+  def self.species # exposes class variable
+    @@species
+  end
+end
+
+person = Person.new("Alice", 25)
+puts "I am a #{Person.species}"
+```
+
+### Methods
+
+Different types of methods include: **instance methods**, **class methods**, and **module methods**.
+
+```ruby
+class Person
+  attr_accessor :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  # instance methods operate on the instance
+  def greet
+    "Hi, I'm #{@name}."
+  end
+
+  # class methods operate on the class itself
+  def self.info # self refers to the class
+    "This is a Person class."
+  end
+end
+
+person = Person.new("Alice")
+puts person.greet # Hi, I'm Alice.
+puts Person.info # This is a Person class.
+```
+
+#### Modules (mixins)
+
+Modules can be mixed into classes using **include** (as instance method) or **extend** (as class method)
+
+```ruby
+module Flyable
+  def fly # module method
+    "I can fly!"
+  end
+end
+
+class Bird
+  include Flyable # module method will operate on instance
+end
+
+class Plane
+  extend Flyable # module method will operate on class
+end
+
+bird = Bird.new
+puts bird.fly       # I can fly!
+puts Plane.fly      # I can fly!
+```
+
+### Singleton Methods
+
+Defines methods for a single object instance
+
+```ruby
+dog = Object.new
+
+def dog.bark
+  "Woof!"
+end
+
+puts dog.bark # Woof!
+```
+
+## Inheritance
+
+A class can inherit from another using `<`. **super** initializes the parent class.
+
+```ruby
+class Animal # parent class
+  attr_reader :species
+
+  def initialize(species)
+    @species = species
+  end
+end
+
+class Dog < Animal # child class
+  attr_reader :name
+
+  def initialize(name)
+    super("Dog") # passes init args to parent class
+    @name = name
+  end
+end
+
+dog = Dog.new("Buddy")
+puts "#{dog.species} #{dog.name}" # Dog Buddy
+```
+
+### Polymorphism/Overriding
+
+A subclass can redefine methods from its parent class
+
+```ruby
+class Animal
+  def speak
+    "Some generic sound"
+  end
+end
+
+class Cat < Animal
+  def speak
+    "Meow!"
+  end
+end
+
+animals = [Animal.new, Cat.new]
+animals.each do |animal|
+  puts animal.speak # Some generic sound, Meow!
+end
+```
+
+## Encapsulation
+
+Methods may be:
+
+- **Public**: default, accessible anywhere
+- **Private**: can only be called within the class
+- **Protected**: can be accessed by instances of the same class or its subclasses.
+
+```ruby
+class Person
+  def initialize(name, secret)
+    @name = name
+    @secret = secret
+  end
+
+  def introduce
+    "Hi, I'm #{@name}."
+  end
+
+  private # methods below this are private
+
+  def reveal_secret
+    @secret
+  end
+
+end
+
+person = Person.new("Alice", "I love Ruby.")
+puts person.introduce # Hi, I'm Alice.
+puts person.reveal_secret  # errors
+```
+
+## Reusing Code
+
+### Blocks
+
+Chunks of code that can be passed to methods. Defined using `{}` or `do..end`
+
+```ruby
+def greet_with_block(name)
+  yield(name) if block_given? # yields to the block, if block is given
+end
+
+greet_with_block("Alice") { |name| puts "Hello, #{name}!" } # Hello, Alice!
+```
+
+### Procs and Lambdas
+
+Procs are objects that hold blocks of code
+
+```ruby
+add = Proc.new { |a, b| a + b }
+puts add.call(2, 3) # 5
+puts add.call(2) # 2
+```
+
+Lambdas are Procs with strict argument checking
+
+```ruby
+add = -> (a, b) { a + b }
+puts add.call(2, 3) # 5
+puts add.call(2) # errors, wrong number of arguments
+```
+
+## Manipulating Built-ins
+
+Built-in classes like `String` or `Array` can be modified
+
+```ruby
+class Array
+  def average
+    sum.to_f / size
+  end
+end
+
+numbers = [1, 2, 3, 4, 5]
+puts numbers.average # 3.0
+```
+
+## Special Methods
+
+Built in methods can be overridden to customize behavior
+
+```ruby
+class Person
+  def initialize(name, age)
+    @name = name
+    @age = age
+  end
+
+  def to_s # string representation
+    "Name: #{@name}, Age: #{@age}"
+  end
+
+  def inspect # used for debugging
+    "#<Person: #{@name}, #{@age}>"
+  end
+end
+
+person = Person.new("Alice", 30)
+puts person.to_s     # Name: Alice, Age: 30
+puts person.inspect  # #<Person: Alice, 30>
+```
