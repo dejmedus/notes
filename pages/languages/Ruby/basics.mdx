@@ -1,0 +1,293 @@
+---
+title: Ruby Basics
+---
+
+## Naming
+
+```ruby
+var_names # snake_case
+CONSTANT_VAR # UPPERCASE
+
+class ClassNames # PascalCase
+  @protected_class_attribute # single underscore
+  @@private_class_attribute # double underscore (for class vars in Ruby)
+end
+```
+
+## Data types
+
+```ruby
+name = "Alice"  # string (text)
+age = 25         # integer (whole nums)
+height = 5.5     # float (decimal nums)
+is_true = true   # boolean (true/false)
+fruits = ["apple", "banana"]  # array
+person = { name: "Alice", age: 25 }  # hash
+```
+
+### Type Checking
+
+```ruby
+x = 5
+x.class # Integer
+```
+
+### Arrays
+
+```ruby
+fruits = ["apple", "banana"]
+fruits[0] # get
+fruits.push("cherry")  # add
+fruits.delete("banana")  # remove
+fruits.each do |fruit|  # loop
+  puts fruit
+end
+```
+
+### Hashes
+
+```ruby
+person = { name: "Alice", age: 25 }
+person[:name]  # get
+person[:city] = "New York"  # add
+person.delete(:age)  # remove
+person.each do |key, value|  # loop
+  puts "#{key}: #{value}"
+end
+```
+
+## Formatting
+
+#### Concatenation
+
+```ruby
+username = "Alex"
+puts "Welcome " + username # Welcome Alex
+```
+
+#### String Interpolation
+
+```ruby
+name = "Bob"
+puts "Thanks #{name}" # Thanks Bob
+```
+
+## Input
+
+All input is returned as a string
+
+```ruby
+puts "Name: "
+name = gets.chomp
+puts "Height: "
+height = gets.chomp.to_i
+```
+
+## Conditionals
+
+Conditional statements include **if**, **elsif**, and **else**
+
+```ruby
+if temperature > 75
+  puts "Hot!"
+elsif temperature < 60
+  puts "Cold!"
+else
+  puts "Mild"
+end
+```
+
+## Loops
+
+### For Loops
+
+```ruby
+fruits = ["apple", "banana", "cherry"]
+fruits.each do |fruit|
+  puts fruit # apple, banana, cherry
+end
+
+5.times do |i|
+  puts i  # 0, 1, 2, 3, 4
+end
+
+fruits.each_with_index do |fruit, index|
+  puts "#{index}: #{fruit}" # 0: apple, 1: banana, 2: cherry
+end
+```
+
+### While Loops
+
+```ruby
+while condition
+  puts "condition is true"
+end
+```
+
+### Loop Control
+
+```ruby
+10.times do |i|
+  break if i == 5 # exits out of loop
+  puts i  # 0, 1, 2, 3, 4
+end
+
+5.times do |i|
+  next if i == 2 # skips to next iteration
+  puts i  # 0, 1, 3, 4
+end
+```
+
+## Boolean Logic
+
+### Comparison Operators
+
+```ruby
+==  # equal to
+!=  # not equal to
+>   # greater than
+<   # less than
+>=  # greater or equal
+<=  # less or equal
+```
+
+### Logical Operators
+
+Logical operators include **and/&&**, **or/||**, and **not/!**
+
+```ruby
+if x > 0 && x < 10 # same as x.between?(0, 10)
+  puts "x is between 0 and 10"
+end
+
+if x < 0 || x > 10 # same as !x.between?(0, 10)
+  puts "Outside range"
+end
+
+is_valid = !false
+```
+
+## Functions
+
+```ruby
+def add(a, b)
+  a + b
+end
+
+result = add(5, 3)
+puts result # 8
+```
+
+### Function Arguments
+
+Different types of function arguments include: **positional**, **default**, **keyword**, and **splat** arguments
+
+```ruby
+def area(width, height) # positional args
+  width * height
+end
+
+puts area(5, 6)  # must be passed in order
+
+def area(width: 5, height: 5) # keyword args with defaults
+  width * height
+end
+
+puts area  # default arg values 5, 5 are used
+puts area(height: 6, width: 5)  # keyword args can be passed in any order
+
+def area(*args)  # splat args
+  args[0] * args[1]
+end
+
+puts area(5, 6)  # can pass any number of args
+puts area(5, 6, 7, 8) # args[2] and args[3] are unused
+
+def area(**kwargs)  # keyword splat args
+  kwargs[:width] * kwargs[:height]
+end
+
+puts area(height: 6, width: 5)  # can pass any number of keyword args in any order
+puts area(width: 5, potatos: 'round', height: 6) # potatoes is unused
+```
+
+### Built-in Functions
+
+```ruby
+"Hello".length      # length
+123.class           # type check
+"42".to_i           # convert to int
+"3.14".to_f         # convert to float
+123.to_s            # convert to string
+3.14159.round(2)    # round
+[1, 2, 3].sum       # sum
+```
+
+## Scope
+
+Determines the accessibility of variables, includes: **local**, **instance**, **class**, and **global**
+
+```ruby
+$x = 10  # global var
+what_scope = "global"
+
+class ScopeClass
+  @@class_var = "class"
+
+  def initialize
+    @instance_var = "instance"
+  end
+
+  def outer
+    enclosing_var = "enclosing"
+
+    inner = lambda do
+      local_var = "local"
+      puts $x, @@class_var, @instance_var, enclosing_var, local_var  # can access higher scopes
+    end
+
+    inner.call
+    puts $x, @@class_var, @instance_var, enclosing_var  # local_var doesn't exist here
+  end
+end
+
+example = ScopeClass.new
+example.outer
+puts $x  # enclosing_var and local_var don't exist here
+```
+
+## Importing Modules
+
+```ruby
+require 'mathn'  # import a module
+require 'securerandom' # import for random numbers
+
+module AModule  # create a module
+  def my_method
+    puts "Hello"
+  end
+end
+```
+
+## Error Handling
+
+```ruby
+begin
+  # code that might raise an error
+  raise "Error!"
+rescue => e
+  puts e.message
+end
+```
+
+## File I/O
+
+w: write, r: read, a: append, w+: read/write, a+: read/append
+
+```ruby
+File.open("file.txt", "w") do |file|
+  file.write("Hello, world!")
+  file.append "Another line"
+  puts file.read
+end
+```
