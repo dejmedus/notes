@@ -20,7 +20,7 @@ title: Gems
 - `bundle init` init a new gemfile
 - `bundle install` install all gemfile dependencies
 - `bundle update` update dependencies
-- `bundle exec <command>` run a script `bundle exec rspec`
+- `bundle exec <gem_name>` run a script `bundle exec rspec`
 - `bundle add <gem_name>` add a gem to the gemfile and install it
 - `bundle remove <gem_name>` remove a gem from the gemfile and uninstall it
 - `bundle check` verify all dependencies are installed
@@ -39,7 +39,6 @@ title: Gems
 ### Local Dev
 
 ```zsh
-bundle init # create a gemfile
 bundle install # install dependencies
 
 ruby app.rb # run
