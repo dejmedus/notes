@@ -18,7 +18,7 @@ const config: DocsThemeConfig = {
   editLink: {
     content: "View on GitHub",
   },
-  // sidebar: { defaultMenuCollapseLevel: 1 },
+  sidebar: { defaultMenuCollapseLevel: 1 },
   head() {
     const { asPath } = useRouter();
     const { frontMatter } = useConfig();
