@@ -13,9 +13,8 @@ title: Git Commands
 #### Navigate
 
 - `git branch` lists all branches
-- `git branch branchName` creates a new branch
-- `git checkout branchName` move into branch
 - `git checkout -b branchName` creates a new branch and moves into it
+- `git checkout branchName` move into branch
 
 #### Commit
 
@@ -44,18 +43,34 @@ title: Git Commands
 
 #### Pull and push
 
-- `git pull origin main` pull remote main branch into branch
-- `git push origin main` push your branch to the remote repository main branch
-- `git push origin branchName` push your branch to the remote repository
+- `git pull origin main` pull remote main branch into local branch
+- `git push origin branchName` push branch to the remote repo feature branch
+  or
+- `git push -u origin branchName` push feature branch to the remote repo and set it as the upstream branch, then `git push` will push to that branch
 - `git checkout -b new-branch origin/branchname` checkout remote branch, good for testing PRs
 
 ### Problems / Solutions
 
-Wont push to a remote repo that has a README
+#### Wont push to a remote repo that has a README
 
 ```shell
 git fetch --all
 git rebase origin/main
+```
+
+#### Merge conflicts
+
+```shell
+git pull origin main
+git checkout feature-branch
+git rebase main
+
+# fix conflict
+git add .
+git rebase --continue
+# repeat until conflicts are resolved
+
+git push origin feature-branch --force
 ```
 
 ### Resources
