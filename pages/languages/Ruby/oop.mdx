@@ -192,9 +192,15 @@ greet_with_block("Alice") { |name| puts "Hello, #{name}!" } # Hello, Alice!
 Procs are objects that hold blocks of code
 
 ```ruby
-add = Proc.new { |a, b| a + b }
+add = proc { |a, b| a + b }
 puts add.call(2, 3) # 5
 puts add.call(2) # 2
+```
+
+Proc shorthand
+
+```ruby
+arr.map(&:to_s) # same as arr.map { |item| item.to_s }
 ```
 
 Lambdas are Procs with strict argument checking
