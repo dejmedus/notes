@@ -276,10 +276,14 @@ except Exception as e:
 
 ## File I/O
 
-r: read, w: write, a: append, x: create
+`r`: read `w`: write `a`: append `x`: create
 
 ```python
 file = open("file.txt", "r")  # open file in read mode
 content = file.read()  # read file content
 file.close()  # close file
+
+
+with open("file.txt", "r") as file:
+    content = file.read()
 ```
