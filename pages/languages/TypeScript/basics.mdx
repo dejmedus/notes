@@ -1,0 +1,273 @@
+---
+title: TypeScript
+---
+
+## Naming
+
+```typescript
+const variableNames: string; // camelCase
+const CONSTANT_VAR = "value"; // UPPERCASE
+
+class ClassName {} // PascalCase
+```
+
+## Variable Declarations
+
+Variables are declared with either `let` or `const`. `let` is used for variables that can be reassigned, while `const` is used for variables that cannot be reassigned.
+
+```typescript
+let x = 5;
+const y = 10;
+
+x = 10; // valid
+y = 20; // error
+```
+
+## Data Types
+
+```typescript
+const name: string = "Alice";
+const age: number = 25;
+const height: number = 5.5;
+const isTrue: boolean = true;
+const fruits: string[] = ["apple", "banana"]; // array
+const person: { name: string; age: number } = { name: "Alice", age: 25 }; // object
+```
+
+### Type Checking
+
+```typescript
+const x = 5;
+console.log(typeof x); // number
+```
+
+### Arrays
+
+```typescript
+const fruits: string[] = ["apple", "banana"];
+fruits[0]; // get
+fruits.push("cherry"); // add
+fruits.slice(1, 1); // remove
+
+for (const fruit of fruits) {
+  console.log(fruit);
+}
+```
+
+### Objects
+
+```typescript
+interface Person: {
+  name: string;
+  age: number;
+}
+
+const person: Person = { name: "Alice", age: 25 };
+person.name; // get
+
+for (const key in person) {
+  console.log(key, person[key]);
+}
+```
+
+## Formatting
+
+```typescript
+const username = "Alex";
+console.log("Welcome " + username); // Welcome Alex
+
+const name = "Bob";
+console.log(`Thanks ${name}`); // Thanks Bob
+```
+
+## Input
+
+```typescript
+const name = prompt("Name: ");
+const height = Number(prompt("Height: "));
+```
+
+## Conditionals
+
+```typescript
+if (temperature > 25) {
+  console.log("Hot!");
+} else if (temperature < 0) {
+  console.log("Cold!");
+} else {
+  console.log("Mild");
+}
+```
+
+## Loops
+
+### For Loops
+
+```typescript
+const fruits = ["apple", "banana", "cherry"];
+for (const fruit of fruits) {
+  console.log(fruit);
+}
+
+for (const i = 0; i <= 5; i++) {
+  console.log(i); // 0, 1, 2, 3, 4, 5
+}
+
+fruits.forEach((fruit, index) => {
+  console.log(index, fruit);
+});
+```
+
+### While Loops
+
+```typescript
+while (condition) {
+  console.log("condition is True");
+}
+```
+
+### Loop Control
+
+```typescript
+for (let i = 0; i < 10; i++) {
+  if (i === 5) break;
+  console.log(i); // 0, 1, 2, 3, 4
+}
+
+for (let i = 0; i < 5; i++) {
+  if (i === 2) continue;
+  console.log(i); // 0, 1, 3, 4
+}
+```
+
+## Boolean Logic
+
+### Comparison Operators
+
+```typescript
+==  // equal
+=== // equal value and type
+!=  // not equal
+>   // greater than
+<   // less than
+>=  // greater or equal
+<=  // less or equal
+```
+
+### Logical Operators
+
+```typescript
+if (x > 0 && x < 10) {
+  console.log("x is between 0 and 10");
+}
+
+if (x < 0 || x > 10) {
+  console.log("Outside range");
+}
+
+const isValid = !false;
+```
+
+## Functions
+
+```typescript
+function add(a: number, b: number): number {
+  return a + b;
+}
+
+const result = add(5, 3);
+console.log(result); // 8
+```
+
+### Function Arguments
+
+```typescript
+// positional args
+function area(width: number, height: number): number {
+  return width * height;
+}
+
+area(5, 6);
+
+// default args
+function areaWithDefaults(width = 5, height = 5): number {
+  return width * height;
+}
+
+areaWithDefaults(); // uses default values
+
+// rest args
+function areaWithRest(...args: number[]): number {
+  return args[0] * args[1];
+}
+
+areaWithRest(5, 6);
+```
+
+### Built-in Functions
+
+```typescript
+"Hello".length; // length
+typeof 123; // type check
+parseInt("42"); // convert to int
+String(123); // convert to string
+Math.round(3.14159); // round
+```
+
+## Scope
+
+```typescript
+const x = 10; // global var
+const whatScope = "global";
+
+function outer() {
+  const y = 20; // function scope
+  const whatScope = "function";
+
+  function inner() {
+    const z = 30; // block scope
+    const whatScope = "block";
+    console.log(x, y, z); // can access all higher scopes
+    console.log(whatScope); // block
+  }
+
+  inner();
+  console.log(x, y); // z doesn't exist here
+  console.log(whatScope); // function
+}
+
+outer();
+console.log(x); // y and z don't exist globally
+console.log(whatScope); // global
+```
+
+## Importing Modules
+
+```typescript
+import { sqrt } from "mathjs"; // import a function
+import * as _ from "lodash"; // import all functions
+```
+
+## Error Handling
+
+```typescript
+try {
+  throw new Error("Error!");
+} catch (e) {
+  console.log(e.message);
+}
+```
+
+## File I/O
+
+```typescript
+import { readFileSync, writeFileSync } from "fs";
+
+const content = readFileSync("file.txt", "utf-8");
+console.log(content);
+
+writeFileSync("file.txt", "Hello, world!");
+```
+
+[TypeScript Handbook: Types](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html)
+[Cheat sheets](https://www.typescriptlang.org/cheatsheets/)

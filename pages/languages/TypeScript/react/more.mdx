@@ -1,0 +1,76 @@
+---
+title: Context
+---
+
+## Context Providers
+
+React state can be shared across multiple files with the `useContext` hook. Custom hooks use the naming convention `use<HookName>`
+
+```tsx
+// hooks/useData.tsx
+
+import { createContext, useContext, useEffect, useState } from "react";
+
+interface IData {
+    id: string
+    content: string;
+}
+
+interface DataContextType {
+    data: IData[];
+    getData: (dataId) => IData;
+}
+
+const defaultContext: DataContextType = {
+    data: IData[],
+    getData: () => ({} as IData),
+};
+
+const DataContext = createContext<DataContextType>(defaultContext);
+
+const initialData: IData[] = [
+    { id: "1", content: "data 1" },
+    { id: "2", content: "data 2" },
+];
+
+export function DataProvider({ children }: { children: React.ReactNode }) {
+    const [data, setData] = useState<IData>(initialData);
+
+    useEffect(() => {
+        setData(mockData);
+    });
+
+    const getData = (dataId: string) =>
+    data.books.filter((book) => book.title == bookName)[0];
+
+    return (
+        <DataContext.Provider value={{ data, getBook, getMovie }}>
+            {children}
+        </DataContext.Provider>
+    );
+}
+
+export default function useData() {
+    return useContext(DataContext);
+}
+```
+
+Wrap the react app with the `DataProvider` component, so all child pages can access the data
+
+```tsx
+// root page
+
+<DataProvider>{children}</DataProvider>
+```
+
+Data state can now be accessed inside components by calling the custom hook
+
+```tsx
+// anyPage.tsx
+
+import useData from "/hooks/useData";
+
+export default function AnyPage() {
+  const { data, getData } = useData();
+}
+```

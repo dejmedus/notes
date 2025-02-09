@@ -1,0 +1,251 @@
+---
+title: OOP
+---
+
+## Classes
+
+Blueprints for creating objects. Classes encapsulate **properties** (variables) and **methods** (functions). `this` refers to the object instance
+
+```typescript
+class Person {
+  public name: string; // accessible from anywhere
+  protected age: number; // accessible from the class and subclasses
+  private secret: string = "shh!"; // only accessible within the class
+
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+
+  greet(): string {
+    return `Hi, I'm ${this.name}`;
+  }
+
+  get secret(): string {
+    return this.secret;
+  }
+}
+
+const person = new Person("Alice", 25);
+console.log(person.greet()); // Hi, I'm Alice
+console.log(person.secret); // shh!
+```
+
+## Methods
+
+Different types of methods include: **instance**, **static**, and **accessor (getters/setters)** methods
+
+```typescript
+class Person {
+  private _age: number;
+
+  constructor(public name: string, age: number) {
+    this._age = age;
+  }
+
+  // instance methods belong to the instance
+  greet(): string {
+    return `Hi, I'm ${this.name}`;
+  }
+
+  // static methods belong to the class
+  static species(): string {
+    return "Homo sapiens";
+  }
+
+  // getter
+  get age(): number {
+    return this._age;
+  }
+
+  // setter
+  set age(newAge: number) {
+    // validation
+    if (newAge > 0) {
+      this._age = newAge;
+    } else {
+      console.log("Age must be a positive number");
+    }
+  }
+}
+
+const person = new Person("Alice", 25);
+console.log(person.greet()); // Hi, I'm Alice
+console.log(Person.species()); // Homo sapiens
+
+console.log(person.age); // using the age getter, 25
+
+person.age = 30; // using the age setter
+console.log(person.age); // 30
+
+person.age = -5; // Age must be a positive number
+```
+
+## Inheritance & Polymorphism
+
+Inheritance allows one class to extend another, inheriting its properties and methods. Use the `super` keyword to pass args to the parent class
+
+Polymorphism allows subclasses to override inherited methods with their own implementation
+
+```typescript
+class Animal {
+  constructor(species: string) {}
+
+  speak(): string {
+    return "Some generic sound";
+  }
+}
+
+class Dog extends Animal {
+  constructor(name: string) {
+    super("Dog");
+  }
+
+  // overriding the Animal speak method
+  speak(): string {
+    return "Bark";
+  }
+}
+
+const dog = new Dog("Buddy");
+console.log(dog.species, dog.name); // Dog Buddy
+console.log(dog.speak()); // Bark
+```
+
+## Abstract Classes
+
+Abstract classes cannot be instantiated directly and serve as blueprints for other classes
+
+```typescript
+abstract class Vehicle {
+  constructor(public model: string) {}
+
+  // abstract method
+  // must be implemented by subclasses
+  abstract move(): void;
+
+  info(): string {
+    return `This is a ${this.model}`;
+  }
+}
+
+class Car extends Vehicle {
+  move(): void {
+    console.log(`${this.model} is driving.`);
+  }
+}
+
+const car = new Car("Sedan");
+car.move(); // Sedan is driving.
+console.log(car.info()); // This is a Sedan
+```
+
+## Extending Built-in Classes
+
+You can extend built-in classes (like `Array`, `Map`, or `Set`) to add or modify behavior
+
+```typescript
+class NumericArray extends Array<number> {
+  push(...items: number[]): number {
+    for (const item of items) {
+      if (typeof item !== "number") {
+        throw new Error("Only numbers are allowed!");
+      }
+    }
+    return super.push(...items);
+  }
+}
+
+const nums = new NumericArray();
+nums.push(1, 2, 3);
+console.log(nums); // [1, 2, 3]
+```
+
+## Design Patterns
+
+### Singleton
+
+Restrict a class to a single instance
+
+```typescript
+class Singleton {
+  private static instance: Singleton;
+  private constructor(public value: number) {}
+
+  static getInstance(): Singleton {
+    if (!Singleton.instance) {
+      Singleton.instance = new Singleton(42);
+    }
+    return Singleton.instance;
+  }
+}
+
+const singleton1 = Singleton.getInstance();
+const singleton2 = Singleton.getInstance();
+console.log(singleton1 === singleton2); // true
+```
+
+### Factory
+
+Instantiate classes without exposing the creation details
+
+```typescript
+abstract class Shape {
+  abstract draw(): void;
+}
+
+class Circle extends Shape {
+  draw(): void {
+    console.log("Drawing a circle.");
+  }
+}
+
+class Square extends Shape {
+  draw(): void {
+    console.log("Drawing a square.");
+  }
+}
+
+class ShapeFactory {
+  static createShape(type: "circle" | "square"): Shape {
+    switch (type) {
+      case "circle":
+        return new Circle();
+      case "square":
+        return new Square();
+    }
+  }
+}
+
+const shape1 = ShapeFactory.createShape("circle");
+const shape2 = ShapeFactory.createShape("square");
+shape1.draw(); // Drawing a circle.
+shape2.draw(); // Drawing a square.
+```
+
+### Closures
+
+Functions that capture variables from their surrounding scope
+
+```typescript
+function createCounter() {
+  let count = 0;
+  return {
+    increment() {
+      count++;
+      console.log(count);
+    },
+    decrement() {
+      count--;
+      console.log(count);
+    },
+  };
+}
+
+const counter = createCounter();
+counter.increment(); // 1
+counter.increment(); // 2
+counter.decrement(); // 1
+```
+
+[TypeScript Handbook: Classes](https://www.typescriptlang.org/docs/handbook/2/classes.html)
