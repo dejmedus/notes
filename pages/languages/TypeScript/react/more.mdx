@@ -41,10 +41,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     });
 
     const getData = (dataId: string) =>
-    data.books.filter((book) => book.title == bookName)[0];
+    data.filter((element) => element.id === dataId)[0];
 
     return (
-        <DataContext.Provider value={{ data, getBook, getMovie }}>
+        <DataContext.Provider value={{ data, getData }}>
             {children}
         </DataContext.Provider>
     );
