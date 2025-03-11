@@ -16,9 +16,10 @@ class Person
     @age = age
   end
 
-
-  def self.species # exposes class variable
-    @@species
+  class << self
+    def species # exposes class variable
+      @@species
+    end
   end
 end
 
@@ -43,9 +44,10 @@ class Person
     "Hi, I'm #{@name}."
   end
 
-  # class methods operate on the class itself
-  def self.info # self refers to the class
-    "This is a Person class."
+  class << self # class methods operate on the class itself
+    def info # self refers to the class
+      "This is a Person class."
+    end
   end
 end
 
@@ -177,7 +179,7 @@ puts person.reveal_secret  # errors
 
 ### Blocks
 
-Chunks of code that can be passed to methods. Defined using `{}` or `do..end`
+Chunks of code that can be passed to methods
 
 ```ruby
 def greet_with_block(name)
@@ -206,7 +208,7 @@ arr.map(&:to_s) # same as arr.map { |item| item.to_s }
 Lambdas are Procs with strict argument checking
 
 ```ruby
-add = -> (a, b) { a + b }
+add = ->(a, b) { a + b }
 puts add.call(2, 3) # 5
 puts add.call(2) # errors, wrong number of arguments
 ```

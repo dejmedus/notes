@@ -1,0 +1,205 @@
+---
+title: Rails
+---
+
+## Routing
+
+RESTful routes: index, show, new, create, edit, update, destroy
+
+```ruby
+# config/routes.rb
+
+Rails.application.routes.draw do
+
+  root "frogs#index"
+
+  get "twigs/index"
+  get "/twigs", to: "twigs#index"
+
+  # get: /url, to: controller#action, as: path_helper
+  get "pond", to: "pond#index", as: "habitat"
+
+  resources :frogs # all RESTful routes
+  resources :lilypads, only: [:index, :show] # also: except
+  resource :grove # singular routes don't have index or destroy
+
+end
+```
+
+> `rails routes` lists all available routes
+
+### Path Helpers
+
+```ruby
+frogs_path # index /frogs
+frog_path(1) # show /frogs/1
+new_frog_path # new /frogs/new
+edit_frog_path(1) # edit /frogs/1/edit
+```
+
+## Controllers
+
+```bash
+rails g controller Plural index show new create edit update destroy
+rails d / rails g ... --force
+```
+
+```ruby
+# app/controllers/frogs_controller.rb
+
+class FrogsController < ApplicationController
+     before_action :set_frog, only: [:show, :edit, :update, :destroy]
+
+    def index
+        @frogs = Frog.all
+    end
+
+    def show
+        # @frog is handled by set_frog
+        # @frog = Frog.find(params[:id])
+    end
+
+    def new
+        @frog = Frog.new
+    end
+
+    def create
+        @frog = Frog.new(frog_params)
+        if @frog.save
+            redirect_to @frog, notice: 'a frog has joined the pond'
+        else
+            render :new, status: :unprocessable_entity
+        end
+    end
+
+    def edit
+        # @frog = Frog.find(params[:id])
+    end
+
+    def update
+        if @frog.update(frog_params)
+            redirect_to @frog
+        else
+            render :edit, status: :unprocessable_entity
+        end
+    end
+
+    def destroy
+        @frog.destroy
+        redirect_to frogs_path
+    end
+
+    private
+
+    def set_frog
+        @frog = Frog.find(params[:id])
+    end
+
+    def frog_params
+        params.require(:frog).permit(:name, :color)
+    end
+end
+```
+
+## Views
+
+`object.present?` means `object && !object.empty?`
+
+```erb
+<!-- app/views/welcome/index.html.erb -->
+
+<h1><%= @grove.name %></h1>
+
+<% @frogs.each do |frog| if @frogs.present? %>
+  <%= render 'shared/frog', frog: frog %>
+<% end %>
+
+<%= link_to 'New Frog', new_frog_path, class: 'btn' %>
+
+<!-- assets/images/frog.jpg -->
+<%= image_tag 'frog.jpg', alt: 'Frog' %>
+```
+
+## Models
+
+```bash
+rails g model Frog name:string color:string spots:integer pond:references
+rails g model Lilypad color:string pond:references
+rails g model Nap frog:references lilypad:references # join table
+rails d / rails g ... --force
+```
+
+```ruby
+# app/models/frog.rb
+
+class Frog < ApplicationRecord
+  belongs_to :pond # frog has pond_id foreign key
+  has_many :naps, dependent: :destroy
+  has_many :lilypads, through: :naps # join table
+
+  validates :name, presence: true
+  validate :is_cute # custom validation
+
+  scope :spotted, -> { where("spots > 0") }
+
+  private
+
+  def is_cute
+    exists = true
+    errors.add(:base, "must be cute") unless exists
+  end
+end
+```
+
+### Validation
+
+[Helpers](https://guides.rubyonrails.org/active_record_validations.html#validation-helpers)
+
+```ruby
+validates :name, presence: true, length: { minimum: 2 }
+validates :spots, uniqueness: true
+validates :color, inclusion: { in: ["green", "blue"] }
+validates :size, numericality: { greater_than: 0 }
+```
+
+{/* ### Callbacks */}
+
+## Active Record
+
+```bash
+rails db:migrate:status
+rails db:migrate
+```
+
+[Migrations](https://guides.rubyonrails.org/active_record_migrations.html#generating-migration-files)
+
+```bash
+rails g migration AddColorIndexToFrogs color:string:index
+rails g migration RemoveSpotsFromFrogs spots:integer
+```
+
+```ruby
+class AddSpeciesToFrogs < ActiveRecord::Migration[7.0]
+    def change # up + down
+        add_column :frogs, :species, :string
+    end
+    # up: add_column :frogs, :species, :string
+    # down: remove_column :frogs, :species
+end
+```
+
+### Querying
+
+```ruby
+frog = Frog.new(name: "Shroom", color: "green") # create in memory
+frog.save # save to database
+
+Frog.create!(name: "Shroom", color: "green") # create + save
+
+Frog.find(1) # find by id
+Frog.find_by(name: "Shroom") # first match
+Frog.where(color: "green", spots: 3) # all matches
+Frog.spotted # scope
+```
+
+{/* ## Testing */}

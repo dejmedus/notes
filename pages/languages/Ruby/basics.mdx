@@ -415,10 +415,43 @@ end
 begin
   # code that might raise an error
   raise "Error!"
-rescue => e
+rescue StandardError => e
   puts e.message
 end
 ```
+
+<details>
+  <summary>Exceptions</summary>
+
+- NoMemoryError
+- ScriptError
+  - LoadError
+  - NotImplementedError
+  - SyntaxError
+- SignalException
+  - Interrupt
+- StandardError
+  - ArgumentError
+  - IOError
+    - EOFError
+  - IndexError
+    - StopIteration
+  - LocalJumpError
+  - NameError
+    - NoMethodError
+  - RangeError
+    - FloatDomainError
+  - RegexpError
+  - RuntimeError
+  - SecurityError
+  - SystemCallError
+  - SystemStackError
+  - ThreadError
+  - TypeError
+  - ZeroDivisionError
+- SystemExit
+
+</details>
 
 ## File I/O
 
