@@ -19,6 +19,9 @@ Rails.application.routes.draw do
   # get: /url, to: controller#action, as: path_helper
   get "pond", to: "pond#index", as: "habitat"
 
+  # custom route w id param
+  post "frogs/:id/kiss", to: "frogs#kiss_frog", as: "kiss_frog"
+
   resources :frogs # all RESTful routes
   resources :lilypads, only: [:index, :show] # also: except
   resource :grove # singular routes don't have index or destroy
@@ -30,12 +33,16 @@ end
 
 ### Path Helpers
 
-```ruby
-frogs_path # index /frogs
-frog_path(1) # show /frogs/1
-new_frog_path # new /frogs/new
-edit_frog_path(1) # edit /frogs/1/edit
-```
+| HTTP   | Path              | Helper                  | Controller Action |
+| ------ | ----------------- | ----------------------- | ----------------- |
+| GET    | `/frogs`          | `frogs_path`            | `index`           |
+| POST   | `/frogs`          | `frogs_path`            | `create`          |
+| GET    | `/frogs/:id`      | `frog_path(@frog)`      | `show`            |
+| PATCH  | `/frogs/:id`      | `frog_path(@frog)`      | `update`          |
+| DELETE | `/frogs/:id`      | `frog_path(@frog)`      | `destroy`         |
+| GET    | `/frogs/new`      | `new_frog_path`         | `new`             |
+| GET    | `/frogs/:id/edit` | `edit_frog_path(@frog)` | `edit`            |
+| POST   | `/frogs/:id/kiss` | `kiss_frog_path(@frog)` | `kiss_frog`       |
 
 ## Controllers
 
@@ -48,7 +55,8 @@ rails d / rails g ... --force
 # app/controllers/frogs_controller.rb
 
 class FrogsController < ApplicationController
-     before_action :set_frog, only: [:show, :edit, :update, :destroy]
+    before_action :set_frog, only: [:show, :edit, :update, :destroy, :kiss_frog]
+    # before_action :set_frog, except: [:index, :new, :create]
 
     def index
         @frogs = Frog.all
@@ -89,6 +97,11 @@ class FrogsController < ApplicationController
         redirect_to frogs_path
     end
 
+    def kiss_frog
+        @frog.update(color: "pink")
+        redirect_to @frog
+    end
+
     private
 
     def set_frog
@@ -103,7 +116,11 @@ end
 
 ## Views
 
-`object.present?` means `object && !object.empty?`
+#### Tags
+
+- `object.present?` means `object && !object.empty?`
+- `object.blank?` means `!object || object.empty?`
+- `object&.method` means `object ? object.method : nil`
 
 ```erb
 <!-- app/views/welcome/index.html.erb -->
@@ -111,6 +128,7 @@ end
 <h1><%= @grove.name %></h1>
 
 <% @frogs.each do |frog| if @frogs.present? %>
+  <!-- app/views/shared/_frog.html.erb -->
   <%= render 'shared/frog', frog: frog %>
 <% end %>
 
@@ -118,6 +136,41 @@ end
 
 <!-- assets/images/frog.jpg -->
 <%= image_tag 'frog.jpg', alt: 'Frog' %>
+```
+
+### Forms
+
+```erb
+<%= form_with(model: @frog) do |form| %>
+  <%= form.label :name %>
+  <%= form.text_field :name %>
+
+  <%= form.hidden_field :color, value: "green" %>
+
+  <%= form.submit %>
+<% end %>
+```
+
+```erb
+<%= form_with(model: @frog, url: kiss_frog_path(@frog), method: :post) do |form| %>
+  <%= form.text_field :name %>
+  <%= form.submit "Kiss this frog" %>
+<% end %>
+```
+
+### Buttons
+
+```erb
+<%= button_to "Delete", frog_path(frog), method: :delete, data: { confirm: "Are you sure?" } %>
+<%= button_to "Kiss Frog", kiss_frog_path(frog), method: :patch %>
+```
+
+### Links
+
+```erb
+<%= link_to "Frog", frog_path(frog), class: "btn" %>
+<%= link_to "Transform", edit_frog_path(frog) %>
+<%= link_to "Delete", frog_path(frog), method: :delete, data: { confirm: "Are you sure?" } %>
 ```
 
 ## Models
@@ -174,7 +227,7 @@ rails db:migrate
 [Migrations](https://guides.rubyonrails.org/active_record_migrations.html#generating-migration-files)
 
 ```bash
-rails g migration AddColorIndexToFrogs color:string:index
+rails g migration AddSpeciesToFrogs species:string
 rails g migration RemoveSpotsFromFrogs spots:integer
 ```
 
@@ -201,5 +254,3 @@ Frog.find_by(name: "Shroom") # first match
 Frog.where(color: "green", spots: 3) # all matches
 Frog.spotted # scope
 ```
-
-{/* ## Testing */}

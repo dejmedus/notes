@@ -1,49 +1,35 @@
 ---
 title: Ruby Syntax
-description: Ruby syntax examples
 ---
 
 ## Syntax
 
-### Types
-
-| Code Example             | Description     | Output                 |
-| ------------------------ | --------------- | ---------------------- |
-| `'Hi all!'`              | string literal  | `"Hi all!"`            |
-| `375`                    | integer literal | `375`                  |
-| `3.141528`               | float literal   | `3.141528`             |
-| `true`                   | boolean literal | `true`                 |
-| `{ 'a' => 1, 'b' => 2 }` | hash literal    | `{"a" => 1, "b" => 2}` |
-| `[ 1, 2, 3 ]`            | array literal   | `[1, 2, 3]`            |
-| `:sym`                   | symbol literal  | `:sym`                 |
-| `nil`                    | nil literal     | `nil`                  |
-
 ### Casting
 
-| Code Example | Description        | Output       |
-| ------------ | ------------------ | ------------ |
-| `13.to_f`    | convert to float   | `13.0`       |
-| `13.0.to_i`  | convert to integer | `13`         |
-| `5.to_s`     | convert to string  | `"5"`        |
-| `5.to_a`     | convert to array   | `[5]`        |
-| `5.to_h`     | convert to hash    | `{5 => nil}` |
+| Example     | Description | Output       |
+| ----------- | ----------- | ------------ |
+| `13.to_f`   | to float    | `13.0`       |
+| `13.0.to_i` | to integer  | `13`         |
+| `5.to_s`    | to string   | `"5"`        |
+| `5.to_a`    | to array    | `[5]`        |
+| `5.to_h`    | to hash     | `{5 => nil}` |
 
 ### String Methods
 
-| Code Example                 | Description                      | Output          |
+| Example                      | Description                      | Output          |
 | ---------------------------- | -------------------------------- | --------------- |
 | `"hi"[0]`                    | first character of the string    | `"h"`           |
-| `"hi"[0..1]`                 | substring from index 0 to 1      | `"hi"`          |
-| `"hi"[0, 2]`                 | substring from index 0, length 2 | `"hi"`          |
+| `"hi banana"[0..1]`          | substring from index 0 to 1      | `"hi"`          |
+| `"hi banana"[0, 2]`          | substring from index 0, length 2 | `"hi"`          |
 | `"hi"[-1]`                   | last character of the string     | `"i"`           |
 | `name = "bob"; "hi #{name}"` | string interpolation             | `"hi bob"`      |
 | `"hi".capitalize`            | capitalize the first letter      | `"Hi"`          |
-| `"[1, 2, 3].join("-")  `     | joins array into string          | `1-2-3`         |
-| `"hi".include?("i")`         | checks if substring is included  | `true`          |
 | `"hi".upcase`                | convert to uppercase             | `"HI"`          |
 | `"Hi".downcase`              | convert to lowercase             | `"hi"`          |
+| `"hi".include?("i")`         | checks if substring is included  | `true`          |
 | `"hi".empty?`                | checks if string is empty        | `false`         |
 | `"hi".length`                | length of the string             | `2`             |
+| `"[1, 2, 3].join("-")  `     | joins array into string          | `1-2-3`         |
 | `"hi".reverse`               | reverse the string               | `"ih"`          |
 | `"hi all".split`             | split by whitespace              | `["hi", "all"]` |
 | `"hi".split("")`             | split into characters            | `["h", "i"]`    |
@@ -56,7 +42,7 @@ description: Ruby syntax examples
 
 ### Array Methods
 
-| Code Example                       | Description                  | Output         |
+| Example                            | Description                  | Output         |
 | ---------------------------------- | ---------------------------- | -------------- |
 | `[1, 2, 3, 4, 5].first`            | first element of the array   | `1`            |
 | `[1, 2, 3, 4, 5].last`             | last element of the array    | `5`            |
