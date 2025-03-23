@@ -1,6 +1,10 @@
 {
   "open": [
     {
+      "tab": "zsh",
+      "commands": ["*CLOSE"]
+    },
+    {
       "tab": "git",
       "commands": ["git branch"],
       "description": "Display the current branch"
