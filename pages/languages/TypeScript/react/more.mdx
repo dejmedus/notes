@@ -12,46 +12,46 @@ React state can be shared across multiple files with the `useContext` hook. Cust
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface IData {
-    id: string
-    content: string;
+  id: string;
+  content: string;
 }
 
 interface DataContextType {
-    data: IData[];
-    getData: (dataId) => IData;
+  data: IData[];
+  getData: (dataId: string) => IData;
 }
 
 const defaultContext: DataContextType = {
-    data: IData[],
-    getData: () => ({} as IData),
+  data: [],
+  getData: () => ({} as IData),
 };
 
 const DataContext = createContext<DataContextType>(defaultContext);
 
 const initialData: IData[] = [
-    { id: "1", content: "data 1" },
-    { id: "2", content: "data 2" },
+  { id: "1", content: "data 1" },
+  { id: "2", content: "data 2" },
 ];
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
-    const [data, setData] = useState<IData>(initialData);
+  const [data, setData] = useState<IData[]>(initialData);
 
-    useEffect(() => {
-        setData(mockData);
-    });
+  useEffect(() => {
+    // setData(mockData);
+  }, []);
 
-    const getData = (dataId: string) =>
-    data.filter((element) => element.id === dataId)[0];
+  const getData = (dataId: string) =>
+    data.find((element) => element.id === dataId) || ({} as IData);
 
-    return (
-        <DataContext.Provider value={{ data, getData }}>
-            {children}
-        </DataContext.Provider>
-    );
+  return (
+    <DataContext.Provider value={{ data, getData }}>
+      {children}
+    </DataContext.Provider>
+  );
 }
 
 export default function useData() {
-    return useContext(DataContext);
+  return useContext(DataContext);
 }
 ```
 
