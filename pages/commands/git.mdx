@@ -10,7 +10,8 @@ title: Git Commands
 - `git rebase -i HEAD~2` interactive rebase
 - `git reflog` view git history
 - `git reset --hard HEAD@{number}` reset to a point in history
-- `git diff --color-words comparison-branch..current-branch` see changes
+- `git diff --color-words main..current-branch` see changes
+- `git fetch origin <branch>` `git checkout -b branch-name origin/<branch>`
 
 #### Setup
 
@@ -18,19 +19,22 @@ title: Git Commands
 - `rm -fr .git` removes a local git directory
 - `git status` status of staging area
 - `git log` show log of changes
-- `git diff filename.txt` see recent changes made to code
+- `git diff filename.txt` see recent changes
 
 #### Navigate
 
 - `git branch` lists all branches
-- `git checkout -b branchName` creates a new branch and moves into it
-- `git checkout branchName` move into branch
+- `git branch -a` lists all branches, including remote
+- `git checkout -b branch-name` creates a new branch and moves into it
+- `git checkout branch-name` move into branch
+- `git checkout -` move into last used branch
 
 #### Commit
 
 - `git add <filename>` add file to staging area
-- `git add .` add all files that aren’t currently staged
-- `git reset` removes all files from git status staging area
+- `git add .` add all files that aren`t currently staged
+- `git add -p` add changes interactively
+- `git commit` opens editor to write commit message
 - `git commit -m “change message”` commits files locally
 - `git commit -m “title” -m “longer description”` add a description of changes
 - `git commit --amend -m "change message"` amend a commit and change the commit message
@@ -48,8 +52,9 @@ title: Git Commands
 
 ### Local branches
 
-- `git checkout main` then `git branch -D <branchname>` delete local branch
+- `git checkout main`, `git pull origin main`, `git checkout -`, then `git rebase main` update current branch with latest changes from main
 - `git checkout -b clean-branch-name origin/main` create a clean branch from main
+- `git checkout main` then `git branch -D branch-name` delete local branch
 - `git branch -m old-branch-name new-branch-name` rename a branch
 - `git bundle create my-branch.bundle` create a bundled copy of branch
 - `git bundle verify my-branch.bundle` verify the bundle
@@ -59,18 +64,19 @@ title: Git Commands
 
 #### Origins
 
+- `git remote -v` view connected remote repositories
 - `git remote add origin <repository-url>` add remote origin
 - `git remote remove origin` remove remote origin
 - `git remote set-url origin url` update remote origin
-- `git remote -v` view connected remote repositories
 
 #### Pull and push
 
 - `git pull origin main` pull remote main branch into local branch
-- `git push origin branchName` push branch to the remote repo feature branch
+- `git push origin branch-name` push branch to the remote repo feature branch
   or
-- `git push -u origin branchName` push feature branch to the remote repo and set it as the upstream branch, then `git push` will push to that branch
-- `git checkout -b new-branch origin/branchname` checkout remote branch, good for testing PRs
+- `git push -u origin branch-name` push feature branch to the remote repo and set it as the upstream branch, then `git push` will push to that branch
+- `git checkout -b new-branch origin/branch-name` checkout remote branch, good for testing PRs (or `gh pr checkout <PR number>` if using GitHub CLI)
+- `git fetch && git checkout branch-name` get all remote branches
 
 ### Problems / Solutions
 
@@ -101,7 +107,7 @@ git add .
 git rebase --continue
 # repeat until conflicts are resolved
 
-git push origin feature-branch --force
+git push origin feature-branch --force-with-lease
 ```
 
 ### Resources
