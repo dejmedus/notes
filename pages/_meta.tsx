@@ -5,5 +5,5 @@ export default {
   commands: "🫐 Commands",
   languages: "🍓 Languages",
   resources: "🍊 Resources",
-  // thoughts: "💭 Thoughts",
+  thoughts: "💭 Thoughts",
 };

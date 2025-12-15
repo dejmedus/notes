@@ -6,4 +6,6 @@ node_modules
 
 .vscode
 
-pages/resources/build
+add-note.md
+pages/languages/TypeScript/testing
+pages/resources/concepts

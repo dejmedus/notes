@@ -4,6 +4,16 @@ title: Git Commands
 
 ### Git & GitHub
 
+#### ✨
+
+- `git reset --soft HEAD~1` undo last commit
+- `git rebase -i HEAD~2` interactive rebase
+- `git reflog` view git history
+- `git reset --hard HEAD@{number}` reset to a point in history
+- `git diff --color-words comparison-branch..current-branch` see changes
+
+#### Setup
+
 - `git init` initializes a local git directory
 - `rm -fr .git` removes a local git directory
 - `git status` status of staging area
@@ -25,6 +35,14 @@ title: Git Commands
 - `git commit -m “title” -m “longer description”` add a description of changes
 - `git commit --amend -m "change message"` amend a commit and change the commit message
 - `git commit --amend --no-edit` add to a commit without changing the commit message
+- `git stash` stash changes
+- `git stash pop` get back changes
+- `git rebase -i HEAD~2` interactive rebase
+  - `pick` to keep a commit
+  - `fixup` merge with above commit
+- `git reset` removes all files from git status staging area
+- `git reset --soft HEAD~1` undo last commit, but keep changes in staging area
+- `git reset --hard HEAD~1` undo last commit and remove changes from staging area
 
 [How to write a good commit message](https://cbea.ms/git-commit/)
 
@@ -33,6 +51,9 @@ title: Git Commands
 - `git checkout main` then `git branch -D <branchname>` delete local branch
 - `git checkout -b clean-branch-name origin/main` create a clean branch from main
 - `git branch -m old-branch-name new-branch-name` rename a branch
+- `git bundle create my-branch.bundle` create a bundled copy of branch
+- `git bundle verify my-branch.bundle` verify the bundle
+- `git clone my-branch.bundle -b main my-repo` clone from a bundle
 
 ### Remote branches
 

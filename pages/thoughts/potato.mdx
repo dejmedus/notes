@@ -1,0 +1,164 @@
+## Tree-walking Interpreters
+
+How do we go from code in an IDE to seeing something print out in the terminal?
+
+![potato code example](/potato.png)
+
+![potato code example](/potato-output.png)
+
+Turns out, computers don't really mind what we write in our files, as long as we can teach them how to read the code
+
+### Say Potato
+
+Whether the syntax looks like `print(2+4)`, `say 2 potato 4` or even `🖨2️⃣🤝4️⃣`, an _interpreted_ language will be broken down into something the _interpreter_, a program that executes code at runtime<sup><a href="#resources">1</a></sup>, understands
+
+> Interpreted languages are often contrasted with compiled languages, which produce executable instructions during a build step, before the code is run<sup><a href="#resources">1</a></sup>
+
+Some interpreted languages will go through steps:
+
+```
+Source → Tokenizer → Parser (AST) → Interpreter → Output
+```
+
+### Tokenization
+
+Tokenization breaks code into chunks called lexemes, essentially the raw characters of a file. Each lexeme is then classified into a token and given a type so the parser knows what to do with it<sup><a href="#resources">2</a></sup>
+
+> `+` is a lexeme, which becomes a token when we decide what it represents - typically, the addition operator
+
+Many languages break tokens into types including: keywords (`if`, `else`), literals (strings, numbers), identifiers (variables), operators (`+`, `%`), and separators (`:`, `;`)<sup><a href="#resources">2</a></sup>
+
+Potato only recognizes:
+
+- one keyword, `say` (logs its result)
+- one operator, `potato` (sums its left and right)
+- and number literals
+
+```
+🍠 main.potato
+
+say 2 potato 4
+```
+
+The above example can be broken down into tokens:
+
+```
+[:PRINT, :NUMBER(2), :ADD, :NUMBER(4)]
+```
+
+```ruby
+# Splits lines of a files into
+# lexemes and creates tokens
+
+module Potato
+  class Tokenizer
+    def self.tokenize(line)
+      line.strip.split(/\s+/).map do |token|
+        case token.downcase
+        when "say"    then Token.new(:PRINT, nil)
+        # Whenever the tokenizer sees the word potato,
+        # we can ask it to create an addition operator
+        # really, this could be any word or symbol :)
+        when "potato" then Token.new(:ADD, nil)
+        when /^\d+$/  then Token.new(:NUMBER, token.to_i)
+        else
+          raise "Unknown token: #{token}"
+        end
+      end
+    end
+  end
+end
+```
+
+### Parsing
+
+Now that we've broken down our code, we need to piece it back together and give it structure
+
+> Like in human languages, to parse means to take input and give it meaning<sup><a href="#resources">3</a></sup>
+
+The parsing step will transform Potato's tokens into a tree representation, referred to as an Abstract Syntax Tree (AST)<sup><a href="#resources">4</a></sup>, that will help the interpreter understand the relationship between tokens
+
+```ruby
+module Potato
+  module AST
+    Node = Struct.new(:type, :value, :children)
+  end
+
+  class Parser
+    # Builds an AST that describes
+    # the relationship between tokens
+    def self.parse(tokens)
+      # ...
+
+      numbers = tokens.select { |t| t.type == :NUMBER }.map(&:value)
+      add_node = AST::Node.new(:add, nil, numbers.map { |n| AST::Node.new(:number, n, []) })
+      print_node = AST::Node.new(:print, nil, [add_node])
+
+      Interpreter.eval(print_node) # Potato only knows how to print out numbers
+    end
+  end
+end
+```
+
+![Abstract Syntax Tree](/ast.png)
+
+If we pretty printed the AST, it might look like:
+
+```sh
+Print
+  Add
+    Number(2)
+    Number(4)
+```
+
+### Interpreting
+
+Mentioned above, interpreters are programs that execute code. _How_ they do so can differ by implementation<sup><a href="#resources">5</a></sup>
+
+Potato is based off of a tree-walking interpreter, which executes code by traversing its AST depth-first. Depth first traversal helps ensure that expressions are evaluated in the correct order<sup><a href="#resources">6</a></sup>
+
+> Tree-walkers are named due to the fact that they.. you guessed it: ~~traverse~~ **walk** the Abstract Syntax **Tree**
+
+![Depth First Traversal](/traversal.png)
+
+```ruby
+module Potato
+  class Interpreter
+    # Recursively visit each node and
+    # do something based on its type
+    # Print > Add > (Number(2) + Number(4))
+    def self.eval(node)
+      case node.type
+      when :print
+        result = self.eval(node.children.first)
+        puts result
+      when :add
+        node.children.map { |child| self.eval(child) }.reduce(:+)
+      when :number
+        node.value
+      end
+    end
+  end
+end
+```
+
+### TLDR;
+
+Root vegetables can take the place of operator symbols because computers don't care what our source code looks like. Instead, we show them how to interpret meaning by breaking up the file and putting it back together:
+
+```
+Source → Tokens → AST → Tree Walk → Output
+```
+
+- **Tokenization**: What are these things?
+- **Parsing/AST**: How are these things related?
+- **Interpreting** What should we do with these related things?
+
+### Resources
+
+- 1 [Introduction to Compilers and Language Design](https://www3.nd.edu/~dthain/compilerbook/compilerbook.pdf), University of Notre Dame
+- 2 [Lexical Analysis](https://en.wikipedia.org/wiki/Lexical_analysis)
+- 3 [Parsing](https://en.wikipedia.org/wiki/Parsing)
+- 4 [Crafting Interpreters](https://craftinginterpreters.com/), Robert Nordstrom
+- 5 [Interpreter](<https://en.wikipedia.org/wiki/Interpreter_(computing)>)
+- 6 [Processing ASTs: Tree Walking](https://lutzhamel.github.io/CSC402/notes/csc402-ln006a.pdf), University of Rhode Island
