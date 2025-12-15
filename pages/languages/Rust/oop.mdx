@@ -1,0 +1,116 @@
+---
+title: Rust OOP
+---
+
+### Structs
+
+Structs are blueprints for objects
+
+```rust
+struct Person {
+    pub name: String, // public
+    age: u32,  // private
+}
+```
+
+`impl` blocks define methods on a struct. `self` refers to the instance
+
+```rust
+impl Person {
+    // impl Into<String>: any type that implements the trait
+    fn new(name: impl Into<String>, age: u32) -> Self {  // constructor
+        Self { name: name.into(), age }
+    }
+
+    fn greet(&self) -> String {  // instance method
+        format!("Hi, I'm {self.name}")
+    }
+}
+
+let person = Person::new("Tofu", 25);
+println!("{}", person.greet()); // Hi, I'm Tofu
+```
+
+#### Derive
+
+`#[derive]` decorator provides structs common traits
+
+```rust
+#[derive(Debug, Clone, PartialEq)]
+struct Person {
+    name: String,
+    age: u32,
+}
+
+let a = Person { name: "Yellow Crayon".to_string(), age: 25 };
+let b = a.clone();  // clone, make a copy
+println!("{:?}", a); // debug, print the struct
+println!("{}", a == b); // partial eq, compare
+```
+
+### Traits (Abstract)
+
+Traits define shared behavior that structs can implement. Methods are abstract
+
+```rust
+trait Animal {
+    fn name(&self) -> &str; // must be implemented
+
+    fn bark(&self) {  // default, optionally can be overridden
+        println!("bork");
+    }
+}
+
+struct Dog {
+    name: String,
+}
+
+impl Animal for Dog {
+    fn name(&self) -> &str { &self.name }
+    fn bark(&self) { println!("even borkier"); }
+}
+
+let dog = Dog { name: "Puggsly".to_string() };
+println!("{}", dog.name()); // Puggsly
+dog.bark(); // even borkier
+```
+
+### Composition
+
+Structs can be stored in another
+
+```rust
+struct Address {
+    city: String,
+    country: String,
+}
+
+struct Person {
+    name: String,
+    address: Address, // a person has an address
+}
+
+let person = Person {
+    name: "Gritty".to_string(),
+    address: Address {
+        city: "Philadelphia".to_string(),
+        country: "USA".to_string(),
+    },
+};
+
+// cant chain multiple inside {}
+println!("{}", person.address.city);  // Philadelphia
+```
+
+### Closures
+
+`= ||` Anonymous functions that can access outside their block
+
+```rust
+let add = |a, b| a + b;
+println!("{}", add(2, 3));  // 5
+
+let greeting = "Hi";
+let greet = || println!("{greeting}");  // captures greeting
+greet();  // Hi
+```

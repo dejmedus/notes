@@ -1,0 +1,403 @@
+---
+title: Rust Basics
+---
+
+### Naming
+
+```rust
+let var_names = 0; // snake_case
+const CONSTANT_VAR: i32 = 100; // UPPERCASE
+
+struct StructNames {} // PascalCase
+enum EnumNames {} // PascalCase
+trait TraitNames {} // PascalCase
+```
+
+### Data types
+
+```rust
+let name = "Daisy"; // &str (static string)
+let color = String::from("pink"); // String
+let letter = 'A'; // char (single char, single quotes)
+let age = 25; // i32  (int)
+let age: u32 = 42; // u32  (positive int)
+let height = 5.5; // f64  (float)
+let is_true = true; // bool
+let fruits = vec!["apple", "banana"]; // Vec (array)
+let numbers = [1, 2, 3]; // [i32; 3] (fixed array)
+an_arr_method(&[1, 2, 3]); // (slice, unassigned array)
+let tuple = ("Sweet Potato", 25); // (&str, i32) tuple
+let maybe: Option<i32> = Some(25); // Option  (value or None)
+
+use std::collections::HashMap;
+let person = HashMap::from([("name", "Brock"), ("age", "25")]); // HashMap
+
+use std::collections::HashSet;
+let tags = HashSet::from(["rust", "python"]); // HashSet (unique values)
+```
+
+#### Casting
+
+```rust
+"Hi".len() // string length
+"42".parse::<i32>().unwrap() // string to int
+"3.14".parse::<f64>().unwrap() // string to float
+123.to_string() // int to string
+```
+
+#### Mutability
+
+Variables are immutable. `mut` allows vars to change
+
+```rust
+let x = 5;
+x = 10; // error
+
+let mut x = 5;
+x = 10; // ok
+```
+
+#### Option and Result
+
+`unwrap` grabs the value or errors
+
+```rust
+// Option, Some value or None
+let maybe: Option<i32> = Some(42);
+
+maybe.unwrap() // grab option value (panics if None)
+maybe.unwrap_or(0) // grab or use a default
+
+// Result, Ok or Err
+let result: Result<i32, String> = Ok(42);
+
+result.unwrap() // grab result (panics if Err)
+result? // return error
+```
+
+#### Vectors
+
+Basically arrays
+
+```rust
+let mut fruits = vec!["apple", "banana"];
+fruits[0]; // get
+fruits.push("cherry"); // add
+fruits.retain(|&x| x != "banana"); // remove by condition
+for fruit in &fruits { // loop
+    println!("{}", fruit);
+}
+```
+
+#### Arrays
+
+Immutable, size can't change (no push/pop)
+
+```rust
+let numbers = [1, 2, 3];
+numbers[0]; // get
+
+for number in &numbers {
+    println!("{number}");
+}
+```
+
+#### Hash Maps
+
+**Unordered** key value pairs
+
+```rust
+use std::collections::HashMap;
+let mut person = HashMap::new();
+
+person.insert("name", "Alice");
+person.insert("age", "25");
+person.get("name"); // get
+person.insert("city", "New York"); // add
+person.remove("age"); // remove
+
+for (key, value) in &person {
+    println!("{key} {value}");
+}
+```
+
+#### HashSets
+
+A set of **unique** values
+
+```rust
+use std::collections::HashSet;
+let mut tags = HashSet::new();
+
+tags.insert("rust");
+tags.insert("python");
+tags.insert("rust"); // not added, duplicate
+tags.contains("rust"); // true
+tags.remove("python");
+tags.len(); // 1
+
+for tag in &tags {
+    println!("{}", tag);
+}
+```
+
+### Formatting
+
+```rust
+// + only works on Strings, not &str
+let greeting = "Welcome ".to_string() + "Frog";
+println!("{greeting}"); // Welcome Frog
+
+let name = "Frog";
+let greeting = format!("Welcome {name}");
+println!("Hi {name}");
+
+// error, can't call inside
+let type = format!("{type_of(&name)}");
+```
+
+### Conditionals
+
+**if**, **else if**, and **else**
+
+```rust
+if temperature > 75 {
+    println!("Hot!");
+} else if temperature < 60 {
+    println!("Cold!");
+} else {
+    println!("Mild");
+}
+```
+
+`if` can return a value
+
+```rust
+let label = if temperature > 75 { "Hot" } else { "Cold" };
+```
+
+### Loops
+
+#### `for`
+
+```rust
+let fruits = vec!["apple", "banana", "cherry"];
+for fruit in &fruits {
+    println!("{fruit}"); // apple, banana, cherry
+}
+
+for i in 0..5 {
+    println!("{i}"); // 0, 1, 2, 3, 4
+}
+
+for i in 0..=5 {
+    println!("{i}"); // 0, 1, 2, 3, 4, 5  (inclusive)
+}
+
+for (index, fruit) in fruits.iter().enumerate() {
+    println!("{index} {fruit}"); // 0 apple, 1 banana, 2 cherry
+}
+```
+
+#### `while`
+
+```rust
+while condition {
+    println!("condition is true");
+}
+```
+
+#### `loop`
+
+Loops until`break`. Can return a value
+
+```rust
+let mut count = 0;
+
+let result = loop {
+    count += 1;
+    if count > 10 {
+        if count == 2 { continue; }
+        break count * 2; //  20
+    }
+};
+```
+
+### Boolean Logic
+
+#### Comparison Operators
+
+```rust
+== // equal to
+!= // not equal to
+>  // greater than
+<  // less than
+>= // greater or equal
+<= // less or equal
+```
+
+#### Logical Operators
+
+**&&**, **||**, and **!**
+
+```rust
+if x > 0 && x < 10 {
+    println!("x is between 0 and 10");
+}
+
+if x < 0 || x > 10 {
+    println!("Outside range");
+}
+
+let is_valid = !false;
+```
+
+### Functions
+
+```rust
+fn add(a: i32, b: i32) -> i32 {
+    a + b // implicit return
+}
+
+let result = add(5, 3);
+println!("{result}"); // 8
+```
+
+#### Arguments
+
+```rust
+fn area(width: i32, height: i32) -> i32 { // positional args
+    width * height
+}
+area(5, 6);
+
+// Option<T>: ? type, Some(value) or None
+fn area_with_defaults(width: Option<i32>, height: Option<i32>) -> i32 {
+    let w = width.unwrap_or(5); // 10
+    let h = height.unwrap_or(5); // 5
+    w * h
+}
+area_with_defaults(Some(10), None); // 50
+
+// slice is used as splat
+fn sum_all(args: &[i32]) -> i32 {
+    args.iter().sum()
+}
+sum_all(&[1, 2, 3, 4]);
+```
+
+#### Macros
+
+Meta programming. Macros generate their code at compile time
+
+```rust
+macro_rules! say_hi {
+    () => { println!("hi!") };
+
+    ($name:expr) => {
+        println!("hi, {}!", $name);
+    };
+}
+
+say_hi!(); // println!("hi!")
+say_hi!("sunflower"); // println!("hi sunflower!")
+```
+
+### Ownership
+
+Values have owners, when the owner goes out of scope the value disappears
+
+> integers, floats, and booleans are automatically copied rather than moved to new owners
+
+```rust
+let a = String::from("hello");
+let b = a; // a is given to b, a no longer exists
+println!("{a}"); // error
+
+let c = b.clone(); // copies a value, b still exists
+```
+
+#### References (Borrowing)
+
+`&` is a reference to a value, it doesn't take ownership. Can have many
+
+```rust
+fn print_length(a: &String) { // uses a reference
+    println!("{}", a.len());
+}
+
+let a = String::from("hi");
+print_length(&a); // & means reference
+println!("{a}");  // a still exists here
+```
+
+#### Mutable References
+
+`&mut` is a mutable reference, it doesn't take ownership and can be modified
+
+```rust
+fn add_world(a: &mut String) {
+    a.push_str(", frog");
+}
+
+let mut a = String::from("hi");
+add_world(&mut a);
+println!("{a}"); // hi, frog
+```
+
+There can only be one at a time
+
+```rust
+let mut a = String::from("hi");
+
+let var1 = &mut a;
+let var2 = &mut a; // error, var1 is still using mutable a
+var1.push_str(" there");
+
+// let var2 = &mut a; // okay here since var1 isn't in use anymore
+```
+
+### Scope
+
+Functions _cannot_ access outside variables
+
+```rust
+static X: i32 = 10; // global constant
+
+fn outer() {
+    let y = 20;
+
+    fn inner() {
+        println!("{X}"); // ok
+       // println!("{y}", y); // error: can't see y
+    }
+
+   // let = || is a closure, it can see outside its scope
+    let inner_closure = || {
+        println!("{X} {y}"); // ok
+    };
+
+    inner();
+    inner_closure();
+}
+```
+
+### Importing
+
+```rust
+use std::collections::HashMap;
+use std::io::{self, Read}; // import many
+use std::io::*; // import all
+```
+
+### Error Handling
+
+```rust
+fn main() {
+    let result = save_file();
+    match result { // match is a switch
+        Ok(_) => println!("file saved!"),
+        Err(e) => println!("couldn't save: {e}"),
+    }
+}
+```

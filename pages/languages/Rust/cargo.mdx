@@ -1,0 +1,39 @@
+---
+title: Cargo
+---
+
+## Cargo
+
+[Documentation](https://doc.rust-lang.org/cargo/)
+
+- `cargo --version` check cargo version
+- `rustup update` update rust and cargo
+
+- `cargo new project_name` create new project
+- `cargo run` compile and run project
+- `cargo check` check if code compiles (faster than build)
+- `cargo build` compile project (creates target/debug/)
+- `cargo build --release` compile with optimizations (creates target/release/)
+- `cargo test` run all tests
+
+- `cargo add package_name` add dependency to Cargo.toml
+- `cargo add package_name@1.0.0` add specific version
+- `cargo remove package_name` remove dependency
+
+- `cargo fmt` format code using rustfmt
+- `cargo clippy` lint code for common mistakes
+
+## Cargo.toml
+
+```toml
+[package]
+name = "my_project"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = "1.0"           # latest 1.x version
+tokio = "1.35.0"        # specific version
+rand = ">=0.8.0"        # minimum version
+regex = { version = "1.5", features = ["unicode"] }  # with features
+```

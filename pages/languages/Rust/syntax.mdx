@@ -1,0 +1,65 @@
+---
+title: Rust Syntax
+---
+
+### Syntax
+
+#### Casting
+
+| Example               | Description  | Output   |
+| --------------------- | ------------ | -------- |
+| `13 as f64`           | to float     | `13.0`   |
+| `13.0 as i32`         | to integer   | `13`     |
+| `5.to_string()`       | to string    | `"5"`    |
+| `"42".parse::<i32>()` | parse string | `Ok(42)` |
+
+#### String Methods
+
+| Example                                           | Description                    | Output          |
+| ------------------------------------------------- | ------------------------------ | --------------- |
+| `"hi".chars().nth(0)`                             | first character                | `Some('h')`     |
+| `"hi banana".get(0..2)`                           | substring (safe)               | `Some("hi")`    |
+| `"hi".chars().last()`                             | last character                 | `Some('i')`     |
+| `"hi".to_uppercase()`                             | to uppercase                   | `"HI"`          |
+| `"Hi".to_lowercase()`                             | to lowercase                   | `"hi"`          |
+| `"hi".contains("i")`                              | contains substring             | `true`          |
+| `"hi".starts_with("h")`                           | starts with                    | `true`          |
+| `"hi".ends_with("i")`                             | ends with                      | `true`          |
+| `"hi".is_empty()`                                 | is empty                       | `false`         |
+| `"hi".len()`                                      | length                         | `2`             |
+| `"hi".chars().rev().collect::<String>()`          | reverse                        | `"ih"`          |
+| `"hi all".split_whitespace().collect::<Vec<_>>()` | split by whitespace            | `["hi", "all"]` |
+| `"hi".chars().collect::<Vec<_>>()`                | split into characters          | `['h', 'i']`    |
+| `" hi ".trim()`                                   | remove leading/trailing spaces | `"hi"`          |
+| `"he77o".replacen("7", "l", 1)`                   | replace first match            | `"hel7o"`       |
+| `"he77o".replace("7", "l")`                       | replace all matches            | `"hello"`       |
+| `["1", "2", "3"].join("-")`                       | join slice into string         | `"1-2-3"`       |
+| `format!("hi {name}")`                            | string formatting              | `"hi bob"`      |
+| `format!("{}{}", "hi ", "all")`                   | concatenate strings            | `"hi all"`      |
+
+####Vec Methods
+
+| Example                                                          | Description            | Output         |
+| ---------------------------------------------------------------- | ---------------------- | -------------- |
+| `vec![1, 2, 3].first()`                                          | first element          | `Some(&1)`     |
+| `vec![1, 2, 3].last()`                                           | last element           | `Some(&3)`     |
+| `vec![1, 2, 3].len()`                                            | length                 | `3`            |
+| `vec![1, 2, 3].contains(&2)`                                     | contains value         | `true`         |
+| `vec![1, 2, 3].push(4)`                                          | add to end             | `[1, 2, 3, 4]` |
+| `vec![1, 2, 3].pop()`                                            | remove last            | `Some(3)`      |
+| `vec![1, 2, 3].insert(0, 0)`                                     | add at index           | `[0, 1, 2, 3]` |
+| `vec![0, 1, 2].remove(0)`                                        | remove at index        | `0`            |
+| `vec![3, 1, 2].sort()`                                           | sort in place          | `[1, 2, 3]`    |
+| `vec![1, 2, 3].iter().any(\|&n\| n > 2)`                         | any match condition    | `true`         |
+| `vec![1, 2, 3].iter().all(\|&n\| n > 0)`                         | all match condition    | `true`         |
+| `vec![1, 2, 3].iter().map(\|n\| n * 2).collect::<Vec<_>>()`      | transform each element | `[2, 4, 6]`    |
+| `vec![1, 2, 3].iter().filter(\|&&n\| n > 1).collect::<Vec<_>>()` | keep matching elements | `[2, 3]`       |
+| `vec![1, 2, 3].iter().sum::<i32>()`                              | sum                    | `6`            |
+| `vec![vec![1, 2], vec![3, 4]].concat()`                          | flatten nested vecs    | `[1, 2, 3, 4]` |
+
+### Documentation
+
+- [Vec](https://doc.rust-lang.org/std/vec/struct.Vec.html)
+- [HashMap](https://doc.rust-lang.org/std/collections/struct.HashMap.html)
+- [Iterator](https://doc.rust-lang.org/std/iter/trait.Iterator.html)
+- [String](https://doc.rust-lang.org/std/string/struct.String.html)
