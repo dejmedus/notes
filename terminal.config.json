@@ -2,28 +2,31 @@
   "open": [
     {
       "tab": "zsh",
-      "commands": ["*CLOSE"]
+      "commands": ["*close"],
+      "shell": "bash"
     },
     {
       "tab": "git",
       "commands": ["git branch"],
-      "description": "Display the current branch"
+      "icon": "git",
+      "shell": "bash"
     },
     {
       "tab": "frontend",
       "commands": ["npm run dev"],
-      "description": "Run the app"
+      "icon": "browser",
+      "shell": "bash"
     }
   ],
   "close": [
     {
       "tab": "git",
-      "commands": ["*CLOSE"],
+      "commands": ["*close"],
       "description": "Close the terminal"
     },
     {
       "tab": "frontend",
-      "commands": ["*STOP", "*CLOSE"],
+      "commands": ["*stop", "*close"],
       "description": "Close the terminal"
     }
   ]
