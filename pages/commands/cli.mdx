@@ -144,10 +144,35 @@ import { Star } from "@/components/Callouts/Callouts.tsx";
 - `Top` real time view of CPU usage and processes
 - `ps` process - any instance of a program, each process has a unique process id
 - `ps -ef` list all processes
-- `lsof -i tcp:3000` checks what is running/listening on port
-- `kill -15 PID` TERM the process at process id
-- `kill -3 PID` QUIT the process at process id
+- `lsof -i :3000` checks what is running/listening on port
+- `kill -15 PID` SIGTERM the process (ask politely)
+- `kill -3 PID` SIGQUIT the process (write memory to file for debugging)
+- `kill -9 PID` SIGKILL the process (nuclear, no cleanup)
 - `killall processName` ends all processes with name
+
+#### Standard Streams
+
+The shell communicates through **3 standard streams**:
+
+- `stdin (0)` standard input (keyboard or file input)
+- `stdout (1)` standard output (program output)
+- `stderr (2)` standard error (error messages)
+
+The shell can be asked to print outside the terminal
+
+- `command > file.txt` redirect stdout
+- `command < input.txt` read in stdin
+- `command 2> errors.txt` redirect stderr
+- `command 2>/dev/null` redirect errors to black hole
+- `command &> output.txt` redirect both stdout and stderr (eq `command > output.txt 2>&1`)
+
+#### Exit Codes
+
+Every program finishes with an **exit code**
+
+- `0` means success
+- Nonzero means error
+- `echo $?` exit code of last command
 
 #### DNS/IP
 
@@ -184,9 +209,9 @@ import { Star } from "@/components/Callouts/Callouts.tsx";
 
 #### Types of users:
 
-- **User** Person who has created the file.
-- **Group** Group of other users who share similar privileges as that of the owner.
-- **Others** Other members who have access to the path where you have kept the files.
+- **User** Person who has created the file.
+- **Group** Group of other users who share similar privileges as that of the owner.
+- **Others** Other members who have access to the path where you have kept the files.
 
 #### Permission level options:
 
@@ -205,6 +230,51 @@ chmod 777 filename.txt
 chmod 760 filename.txt
 
 ```
+
+### Environment Variables
+
+Environment variables are key-value pairs stored in the shell environment
+
+- `printenv` or `env` shows all environment variables
+- `echo $VAR_NAME` prints value of a variable
+- `export VAR_NAME=value` sets a variable for current shell session
+- `unset VAR_NAME` removes a variable
+- `VAR_NAME=value command` run a command with a temporary variable
+
+#### Common environment variables
+
+- `$HOME` path to home directory
+- `$PATH` directories to search for executables
+- `$PWD` current working directory
+- `$USER` current username
+- `$SHELL` current shell
+
+#### Examples
+
+- `echo $PATH` show directories searched for commands
+- `export DEBUG=true` set variable for current session
+- `DEBUG=true node app.js` run program with variable set temporarily
+- `unset DEBUG` remove variable
+
+#### Modifying `$PATH`
+
+The `$PATH` variable controls where the shell looks for executables
+
+- `echo $PATH` show directories searched for commands
+- `export PATH=$PATH:/new/directory` add a directory until shell is closed
+
+- **Make the change permanent:**
+  Add the line to ~/.zshrc`:
+
+  ```sh
+  export PATH=$PATH:/new/directory
+  ```
+
+  Then reload with:
+
+  ```sh
+  source ~/.zshrc
+  ```
 
 ### Resources
 
