@@ -58,7 +58,11 @@ puts Person.info # This is a Person class.
 
 #### Modules (mixins)
 
-Modules can be mixed into classes using **include** (as instance method) or **extend** (as class method)
+A way to organize and namespace our classes
+
+Modules can be mixed into classes using **include** (as instance method), **extend** (as class method), or **prepend** (as instance methods that override local instance methods)
+
+> prepend methods technically don't override local methods, they just appear earlier in the method lookup
 
 ```ruby
 module Flyable
@@ -75,28 +79,63 @@ class Plane
   extend Flyable # module method will operate on class
 end
 
+class Kite
+  prepend Flyable
+
+  def fly
+    "I can fly if there is wind"
+  end
+
+  class << self
+    def fly
+      "Kites can fly!"
+    end
+  end
+end
+
 bird = Bird.new
+kite = Kite.new
+
 puts bird.fly       # I can fly!
 puts Plane.fly      # I can fly!
+puts kite.fly       # I can fly!
+puts Kite.fly       # Kites can fly!
 ```
 
 ### Singleton Methods
 
-Defines methods for a single object instance
+A method on a specific instance
 
 ```ruby
-dog = Object.new
+kite = Kite.new
 
-def dog.bark
-  "Woof!"
+def kite.crash
+  "We are stuck in a tree!"
 end
 
-puts dog.bark # Woof!
+puts kite.crash # we are stuck in a tree
+puts Kite.crash # NoMethodError
+```
+
+### Self
+
+```ruby
+class MyClass
+  puts self  # MyClass
+
+  def instance_method
+    puts self  # instance of MyClass
+  end
+
+  def self.class_method
+    puts self  # MyClass
+  end
+end
 ```
 
 ## Inheritance
 
-A class can inherit from another using `<`. **super** initializes the parent class.
+A class can inherit from another using `<`. **super** calls the parent method with the same name
 
 ```ruby
 class Animal # parent class
@@ -111,7 +150,9 @@ class Dog < Animal # child class
   attr_reader :name
 
   def initialize(name)
-    super("Dog") # passes init args to parent class
+    super("Dog") # calls Animal's initialize with provided args
+    # super() calls with no args
+    # super calls with current args (name)
     @name = name
   end
 end
@@ -149,7 +190,7 @@ Methods may be:
 
 - **Public**: default, accessible anywhere
 - **Private**: can only be called within the class
-- **Protected**: can be accessed by instances of the same class or its subclasses.
+- **Protected**: can be accessed by instances of the same class or its subclasses
 
 ```ruby
 class Person
@@ -182,8 +223,14 @@ puts person.reveal_secret  # errors
 Chunks of code that can be passed to methods
 
 ```ruby
+# implicit block
 def greet_with_block(name)
   yield(name) if block_given? # yields to the block, if block is given
+end
+
+# explicit block
+def greet_with_block(name, &block) # &block represents the proc object
+  block.call(name) if block
 end
 
 greet_with_block("Alice") { |name| puts "Hello, #{name}!" } # Hello, Alice!
@@ -196,10 +243,10 @@ Procs are objects that hold blocks of code
 ```ruby
 add = proc { |a, b| a + b }
 puts add.call(2, 3) # 5
-puts add.call(2) # 2
+puts add.call(2) # TypeError 2 + nil
 ```
 
-Proc shorthand
+Proc shorthand (`:&`)
 
 ```ruby
 arr.map(&:to_s) # same as arr.map { |item| item.to_s }
@@ -213,22 +260,7 @@ puts add.call(2, 3) # 5
 puts add.call(2) # errors, wrong number of arguments
 ```
 
-## Manipulating Built-ins
-
-Built-in classes like `String` or `Array` can be modified
-
-```ruby
-class Array
-  def average
-    sum.to_f / size
-  end
-end
-
-numbers = [1, 2, 3, 4, 5]
-puts numbers.average # 3.0
-```
-
-## Special Methods
+## Manipulating Built ins
 
 Built in methods can be overridden to customize behavior
 
@@ -251,4 +283,93 @@ end
 person = Person.new("Alice", 30)
 puts person.to_s     # Name: Alice, Age: 30
 puts person.inspect  # #<Person: Alice, 30>
+```
+
+## Metaprogramming
+
+Metaprogramming refers to generating or modifying code at runtime
+
+> Runtime: when the program is executing, as opposed to when it is written or statically analyzed
+
+### instance_eval
+
+Opens instance context. Then we can access, add, and modify instance variables
+
+```ruby
+class Person
+  def initialize(name)
+    @name = name
+  end
+end
+
+person = Person.new("Alice")
+
+person.instance_eval do
+  puts @name  # Alice
+  @age = 25   # sets instance variable
+end
+```
+
+### class_eval
+
+Opens class context. Then we can access, add, and modify class variables and methods
+
+```ruby
+Person.class_eval do
+  def greet
+    "Hi, I'm #{@name}"
+  end
+end
+
+puts person.greet  # Hi, I'm Alice
+```
+
+### define_method
+
+Create dynamic methods
+
+```ruby
+class User
+  [:name, :email, :age].each do |attr|
+    define_method(attr) do # create getter method
+      instance_variable_get("@#{attr}")
+    end
+
+    define_method("#{attr}=") do |value| # create setter
+      instance_variable_set("@#{attr}", value)
+    end
+  end
+end
+
+user = User.new
+user.name = "Bob"
+puts user.name  # Bob
+```
+
+### send and public_send
+
+Call methods dynamically
+
+```ruby
+class Calculator
+  def add(a, b)
+    a + b
+  end
+
+  private
+
+  def secret
+    "secret!"
+  end
+end
+
+calc = Calculator.new
+
+# we can dynamically
+# decide which method to call
+method_name = :add
+puts calc.send(method_name, 2, 3)  # 5
+
+puts calc.send(:secret)            # secret!, ignores private
+puts calc.public_send(:secret)     # NoMethodError, respects private
 ```

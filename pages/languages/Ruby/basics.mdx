@@ -11,9 +11,84 @@ var_names # snake_case
 CONSTANT_VAR # UPPERCASE
 
 class ClassNames # PascalCase
-  @protected_class_attribute # single underscore
-  @@private_class_attribute # double underscore (for class vars in Ruby)
+  @instance_var # single underscore
+  @@class_var # double underscore
 end
+```
+
+## Namespacing
+
+Namespacing prevents naming collisions by organizing constants
+
+### Constant lookups
+
+- `GREETING`: Find nearest
+- `X::Y`: Look inside X
+- `::Y`: Look farthest
+
+```ruby
+GREETING = "top-level"
+
+module Outer
+  GREETING = "outer"
+
+  class Parent
+    GREETING = "parent"
+
+    def lookup
+      puts GREETING           # lexical "parent"
+      puts Outer::GREETING    # "outer"
+      puts Parent::GREETING   # "parent"
+      puts NotFound::Greeting # NameError
+      puts ::GREETING         # absolute "top-level"
+    end
+  end
+
+  class Child < Parent
+    GREETING = "child"
+
+    def lookup
+      puts GREETING          # "child"
+      puts ::GREETING        # "top-level"
+      puts Child::GREETING   # "child"
+      puts Outer::GREETING   # "outer"
+      puts Parent::GREETING  # "parent"
+    end
+  end
+end
+```
+
+## Scope
+
+Determines the accessibility of variables, includes: **local**, **instance**, **class**, and **global**
+
+```ruby
+$x = 10  # global var
+what_scope = "global"
+
+class ScopeClass
+  @@class_var = "class"
+
+  def initialize
+    @instance_var = "instance"
+  end
+
+  def outer
+    enclosing_var = "enclosing"
+
+    inner = lambda do
+      local_var = "local"
+      puts $x, @@class_var, @instance_var, enclosing_var, local_var  # can access higher scopes
+    end
+
+    inner.call
+    puts $x, @@class_var, @instance_var, enclosing_var  # local_var doesn't exist here
+  end
+end
+
+example = ScopeClass.new
+example.outer
+puts $x  # enclosing_var and local_var don't exist here
 ```
 
 ## Printing
@@ -27,7 +102,8 @@ p "hi there" # "hi there" (inspect)
 ## Data types
 
 ```ruby
-name = "Alice"  # string (text)
+name = "Alice"  # string (mutable text)
+food = :potato # symbol (unique immutable text)
 age = 25         # integer (whole nums)
 height = 5.5     # float (decimal nums)
 is_true = true   # boolean (true/false)
@@ -75,13 +151,13 @@ c - [1, 3] # [2, 4, 5]
 
 ### Hashes
 
-Symbols are used as keys in hashes since they are more performant than strings
+Symbols are used as keys in hashes as they are more performant than strings
 
 ```ruby
 person2 = { "name" => "Alice", "age" => 25 } # => as keys are non-symbols
 person = { name: "Alice", age: 25 } # : as keys are symbols
 person[:name]  # get
-shoes.fetch(:city, "Toronto") # get with default
+person.fetch(:city, "Toronto") # get with default
 person[:height] ||= 5.5  # if nil, assign
 person[:city] = "New York"  # add
 person.delete(:age)  # remove
@@ -95,6 +171,54 @@ person.each do |key, value|  # loop
   puts "#{key}: #{value}"
 end
 ```
+
+> Strings are mutable objects: each literal is a separate object in memory
+> Symbols are immutable objects: there is only ever one object, and it only holds its name
+
+```ruby
+"hello".object_id == "hello".object_id  # false
+:hello.object_id == :hello.object_id # true
+
+a = "hello"
+b = :hello
+```
+
+```ruby
+# a and b are variables (refs to objects in memory)
+a << "!" # s points to the same string literal, now mutated
+b << "!" # cant do this! symbols are immutable and can't be changed
+```
+
+### Frozen Objects & Immutability
+
+We can make mutable objects immutable by freezing
+
+```ruby
+str = "hello"
+str.freeze
+str.upcase!  # FrozenError
+
+arr = [1, 2, 3].freeze
+arr << 4  # FrozenError
+```
+
+Copies, duplicates, and clones
+
+```ruby
+# frozen_string_literal: true
+
+frozen_str = "french"
+
+copied_str = +frozen_str  # always thawed, new string (only works on strings)
+copied_str << " fries"  # french fries
+
+frozen_str.dup.frozen?  # false, always thawed, shallow copy
+frozen_str.clone.frozen?  # true, same state as frozen_str, shallow copy
+```
+
+> shallow copy means we are creating a new obj but the references it
+> contains will still point to the same elements
+> **outer: unique, inner: shared**
 
 ## Formatting
 
@@ -188,7 +312,7 @@ end
 (0..2) # 0, 1, 2 (inclusive)
 (0...2) # 0, 1 (exclusive)
 (0..10).step(2) # 0, 2, 4, 6, 8, 10
-(a..z) # a, b, c, ..., z
+("a".."z") # a, b, c, ..., z
 ```
 
 ### Iterators
@@ -298,21 +422,22 @@ puts result # 8
 Different types of arguments include: **positional**, **default**, **keyword**, and **splat** arguments
 
 ```ruby
-def area(width, height) # positional args
+def area(width, height = 6) # positional args
   width * height # implicit return
 end
 
+puts area(5) # default height is used
 puts area(5, 6)  # must be passed in order
 
-def area(width: 5, height: 5) # keyword args with defaults
-  return width * height # explicit return
-  height # never reached
+def area(width:, height: 6) # keyword args with defaults
+  width * height
 end
 
-puts area  # default arg values 5, 5 are used
+puts area(width: 5)  # default height is used
 puts area(height: 6, width: 5)  # keyword args can be passed in any order
 
 def area(*args)  # splat args
+  # args [5, 6]
   args[0] * args[1]
 end
 
@@ -320,11 +445,19 @@ puts area(5, 6)  # can pass any number of args
 puts area(5, 6, 7, 8) # args[2] and args[3] are unused
 
 def area(**kwargs)  # keyword splat args
-  kwargs[:width] * kwargs[:height]
+  # kwargs { width: 5, height: 6 }
+  kwargs[:width] * kwargs[:height] # accessed with symbols
 end
 
 puts area(height: 6, width: 5)  # can pass any number of keyword args in any order
 puts area(width: 5, potatos: 'round', height: 6) # potatoes is unused
+
+# order: positional + defaults, keywords + defaults, positional splats, keyword splats
+def area(pos_arg, pos_arg_def = 20, key_arg:, key_arg_def: 10, *pos_splat, **key_splat)
+  pos_arg + pos_arg_def + key_arg + key_arg_def + pos_splat[0] + key_splat[:extra]
+end
+
+puts area(1, 2, key_arg: 3, key_arg_def: 4, 5, extra: 6)
 ```
 
 ### Predicate Methods
@@ -363,65 +496,72 @@ puts greeting # "hi"
 3.14159.round(2)    # round
 ```
 
-## Scope
-
-Determines the accessibility of variables, includes: **local**, **instance**, **class**, and **global**
-
-```ruby
-$x = 10  # global var
-what_scope = "global"
-
-class ScopeClass
-  @@class_var = "class"
-
-  def initialize
-    @instance_var = "instance"
-  end
-
-  def outer
-    enclosing_var = "enclosing"
-
-    inner = lambda do
-      local_var = "local"
-      puts $x, @@class_var, @instance_var, enclosing_var, local_var  # can access higher scopes
-    end
-
-    inner.call
-    puts $x, @@class_var, @instance_var, enclosing_var  # local_var doesn't exist here
-  end
-end
-
-example = ScopeClass.new
-example.outer
-puts $x  # enclosing_var and local_var don't exist here
-```
-
-## Importing Modules
-
-```ruby
-require 'mathn'  # import a module
-require 'securerandom'
-
-module AModule  # create a module
-  def my_method
-    puts "Hello"
-  end
-end
-```
-
 ## Error Handling
+
+### Raising Exceptions
+
+```ruby
+raise "Something went wrong"  # RuntimeError
+raise ArgumentError, "Invalid argument"
+raise ArgumentError.new("Invalid argument")
+```
+
+### Exception Classes
+
+```ruby
+class ValidationError < StandardError
+  attr_reader :field
+
+  def initialize(message, field: nil)
+    super(message)
+    @field = field
+  end
+end
+
+raise ValidationError.new("Email is invalid", field: :email)
+```
+
+### Rescue
 
 ```ruby
 begin
-  # code that might raise an error
-  raise "Error!"
+  # risky stuff
+rescue ArgumentError => e # will catch first
+  puts "Argument error: #{e.message}"
 rescue StandardError => e
-  puts e.message
+  puts "Standard error: #{e.message}"
+rescue => e
+  puts "Unknown error: #{e.message}"
+end
+```
+
+```ruby
+result = risky_method rescue "default value"
+
+def divide(a, b)
+# we don't actually need a begin
+  a / b
+rescue ZeroDivisionError
+  Float::INFINITY
+end
+```
+
+```ruby
+begin
+  # risky stuff
+  whatever = false
+rescue IOError => e
+  retry if whatever
+  puts "Whelp we tried"
+else
+  puts "No errors!"
+ensure # finally
+  puts "Win or lose, we had a nice time:)"
 end
 ```
 
 <details>
-  <summary>Exceptions</summary>
+  <summary>Exception Hierarchy</summary>
 
 - NoMemoryError
 - ScriptError
@@ -464,7 +604,3 @@ File.open("file.txt", "w") do |file|
   puts file.read
 end
 ```
-
-## Types
-
-[RBS inline](https://github.com/soutaro/rbs-inline/wiki/Syntax-guide)
