@@ -1,0 +1,46 @@
+{
+  "name": "potato-light",
+  "type": "light",
+  "colors": {
+    "editor.background": "#ffffff",
+    "editor.foreground": "#111111"
+  },
+  "tokenColors": [
+    { "scope": "operator.p.potato", "settings": { "foreground": "#ff8080" } },
+    { "scope": "operator.o.potato", "settings": { "foreground": "#ffd149" } },
+    { "scope": "operator.t1.potato", "settings": { "foreground": "#ffb3ff" } },
+    { "scope": "operator.a.potato", "settings": { "foreground": "#80ff40" } },
+    { "scope": "operator.t2.potato", "settings": { "foreground": "#70f0ff" } },
+    { "scope": "operator.o2.potato", "settings": { "foreground": "#d280ff" } },
+    { "scope": "comment.line.potato", "settings": { "foreground": "#888888" } },
+    {
+      "scope": [
+        "keyword.operator.paren.begin.potato",
+        "keyword.operator.paren.end.potato",
+        "keyword.operator.paren.potato"
+      ],
+      "settings": { "foreground": "#111111", "fontStyle": "bold" }
+    },
+    {
+      "scope": [
+        "keyword.other.say.potato",
+        "keyword.operator.is.potato",
+        "keyword.operator.equals.potato",
+        "keyword.operator.gains.potato"
+      ],
+      "settings": { "foreground": "#444444" }
+    },
+    {
+      "scope": ["constant.numeric.potato", "string.quoted.double.potato"],
+      "settings": { "foreground": "#555555" }
+    },
+    {
+      "scope": "keyword.operator.true.potato",
+      "settings": { "foreground": "#aa8dff" }
+    },
+    {
+      "scope": "keyword.operator.false.potato",
+      "settings": { "foreground": "#6bceff" }
+    }
+  ]
+}
