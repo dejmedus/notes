@@ -1,0 +1,70 @@
+{
+  "name": "potato-dark",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#0d1117",
+    "editor.foreground": "#ffffff"
+  },
+  "tokenColors": [
+    {
+      "scope": "operator.p.potato",
+      "settings": { "foreground": "#ff6060" }
+    },
+    {
+      "scope": "operator.o.potato",
+      "settings": { "foreground": "#ffb326" }
+    },
+    {
+      "scope": "operator.t1.potato",
+      "settings": { "foreground": "#fa95ff" }
+    },
+    {
+      "scope": "operator.a.potato",
+      "settings": { "foreground": "#63f221" }
+    },
+    {
+      "scope": "operator.t2.potato",
+      "settings": { "foreground": "#45daff" }
+    },
+    {
+      "scope": "operator.o2.potato",
+      "settings": { "foreground": "#b255ff" }
+    },
+    {
+      "scope": "comment.line.potato",
+      "settings": { "foreground": "#aaaaaa" }
+    },
+    {
+      "scope": [
+        "keyword.operator.paren.begin.potato",
+        "keyword.operator.paren.end.potato",
+        "keyword.operator.paren.potato"
+      ],
+      "settings": {
+        "foreground": "#383838",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "scope": [
+        "keyword.other.say.potato",
+        "keyword.operator.is.potato",
+        "keyword.operator.equals.potato",
+        "keyword.operator.gains.potato"
+      ],
+      "settings": { "foreground": "#686868" }
+    },
+    {
+      "scope": ["constant.numeric.potato", "string.quoted.double.potato"],
+      "settings": { "foreground": "#4d4d4d" }
+    },
+    {
+      "scope": "keyword.operator.true.potato",
+      "settings": { "foreground": "#aa8dff" }
+    },
+    {
+      "scope": "keyword.operator.false.potato",
+      "settings": { "foreground": "#6bceff" }
+    }
+  ]
+}
