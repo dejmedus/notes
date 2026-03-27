@@ -2,6 +2,8 @@
 title: Ruby OOP
 ---
 
+import { Callout } from "nextra/components";
+
 ## Classes
 
 Blueprints for creating objects. They define **attributes** and **methods** that objects instantiated from the class will have. Instance variables are prefixed with `@`. Class variables are prefixed with `@@`
@@ -45,6 +47,7 @@ class Person
   end
 
   class << self # class methods operate on the class itself
+  # "class methods" are just singleton methods on the class object
     def info # self refers to the class
       "This is a Person class."
     end
@@ -104,9 +107,14 @@ puts Kite.fly       # Kites can fly!
 
 ### Singleton Methods
 
-A method on a specific instance
+A method on a single object
+
+<Callout type="info" emoji="ℹ️">
+  The term *class method* is just shorthand for a Classes singleton method
+</Callout>
 
 ```ruby
+class Kite; end
 kite = Kite.new
 
 def kite.crash
@@ -115,22 +123,20 @@ end
 
 puts kite.crash # we are stuck in a tree
 puts Kite.crash # NoMethodError
+
+kite.class # creator class Kite
+kite.ancestors # [Kite, Object, Kernel, BasicObject]
+kite.singleton_class.ancestors # its own class [<Class:#<Kite:0x...>>, Kite, Object, Kernel, BasicObject]
 ```
 
-### Self
+`class << self` opens the singleton class of `self`
 
 ```ruby
-class MyClass
-  puts self  # MyClass
-
-  def instance_method
-    puts self  # instance of MyClass
-  end
-
-  def self.class_method
-    puts self  # MyClass
-  end
+class << Fruit
+  def yellow; "banana"; end
 end
+# is the same as
+def Fruit.yellow; "banana"; end
 ```
 
 ## Inheritance
