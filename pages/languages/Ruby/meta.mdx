@@ -1,0 +1,128 @@
+---
+title: Metaprogramming
+---
+
+## Metaprogramming
+
+Metaprogramming refers to generating or modifying code at runtime
+
+> Runtime: when the program is executing, as opposed to when it is written or statically analyzed
+
+### instance_eval
+
+Opens instance context. Then we can access, add, and modify instance variables
+
+```ruby
+class Person
+  def initialize(name)
+    @name = name
+  end
+end
+
+person = Person.new("Alice")
+
+person.instance_eval do
+  puts @name  # Alice
+  @age = 25   # sets instance variable
+end
+```
+
+### class_eval
+
+Opens class context. Then we can access, add, and modify class variables and methods
+
+```ruby
+Person.class_eval do
+  def hi
+    "Hi, I'm #{@name}"
+  end
+end
+
+puts person.hi # Hi, I'm Alice
+```
+
+### define_method
+
+Create dynamic methods
+
+```ruby
+class User
+  [:name, :email, :age].each do |attr|
+    define_method(attr) do # create getter method
+      instance_variable_get("@#{attr}")
+    end
+
+    define_method("#{attr}=") do |value| # create setter
+      instance_variable_set("@#{attr}", value)
+    end
+  end
+end
+
+user = User.new
+user.name = "Bob"
+puts user.name  # Bob
+```
+
+### reference and bind
+
+Create an unbound method from a reference and bind it to an instance
+
+```ruby
+class Hi
+  def say_hi(name)
+    "Hi, #{name}"
+  end
+end
+
+jellyfish = Hi.new
+
+unbound = Hi.instance_method(:say_hi) # grab unbound method
+bound = unbound.bind(jellyfish) # bind to instance
+puts bound.call("PB&J") # execute bound method, Hi, PB&J
+# or
+Hi.instance_method(:say_hi).bind(jellyfish).call("PB&J")
+```
+
+### method and call
+
+Grab a bound method reference from an instance and invoke it
+
+```ruby
+class Math
+  def square(n) = n * n
+end
+
+m = Math.new
+
+sq = m.method(:square) # bound reference
+
+sq.call(5) # 25
+[1, 2, 3, 4].map(&sq) # now can be used as proc
+```
+
+### send and public_send
+
+Lookup and execute an instance method dynamically
+
+```ruby
+class Calculator
+  def add(a, b)
+    a + b
+  end
+
+  private
+
+  def secret
+    "secret!"
+  end
+end
+
+calc = Calculator.new
+
+# we can dynamically decide which method to call
+method_name = :add
+puts calc.send(method_name, 2, 3)  # 5
+
+puts calc.send(:secret) # secret!, ignores private
+puts calc.public_send(:secret) # NoMethodError, respects private
+```

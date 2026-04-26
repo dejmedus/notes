@@ -2,28 +2,29 @@
 title: Gems
 ---
 
+### Dependency Management **bundler**
+
+[Documentation](https://bundler.io/)
+
+> `bundle exec <gem>` uses the exact gem version from `Gemfile.lock`
+
+- `gem install bundler` install bundler
+- `bundle init` init a new gemfile
+- `bundle install` install all gemfile dependencies
+- `bundle add <gem_name>` add a gem to the gemfile and install it
+- `bundle remove <gem_name>` remove a gem from the gemfile and uninstall it
+- `bundle update <gem_name>` update a specific gem
+- `bundle update <gem_name> --conservatively` update a gem if it doesn't require dep bumps
+- `bundle exec <gem_name>` run a script in the bundle context e.g. `bundle exec rspec`
+- `bundle check` verify all dependencies are installed
+
 ### Package Manager **RubyGems**
 
 [Documentation](https://guides.rubygems.org/)
 
 - `gem install <gem_name>` install a gem globally
 - `gem list` list all installed gems
-- `gem uninstall <gem_name>` uninstall a gem
-- `gem update` update all installed gems
 - `gem update <gem_name>` update a specific gem
-
-### Dependency Management **bundler**
-
-[Documentation](https://bundler.io/)
-
-- `gem install bundler` install bundler
-- `bundle init` init a new gemfile
-- `bundle install` install all gemfile dependencies
-- `bundle update` update dependencies
-- `bundle exec <gem_name>` run a script `bundle exec rspec`
-- `bundle add <gem_name>` add a gem to the gemfile and install it
-- `bundle remove <gem_name>` remove a gem from the gemfile and uninstall it
-- `bundle check` verify all dependencies are installed
 
 ### Version Manager **rbenv**
 
