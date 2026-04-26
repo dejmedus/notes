@@ -14,17 +14,13 @@ You likely knew this immediately. But how did the computer?
 
 ### How many `🐝`s do we really need?
 
-Potato, the fake language we see above, was originally a [tree-walker](./potato.mdx), meaning it traversed a tree representation of its syntax and executed as it went. In every step from source code to interpretation it saw three `🐝` nodes that hold two values between them
+Potato, the fake language above, was originally a [tree-walker](./potato.mdx), meaning it traversed a tree representation of its syntax and executed as it went. In every step from source code to interpretation it saw three `🐝` nodes
 
-This time around we will explore the more complex and performant bytecode interpreter, which somehow needs far less `🐝`s. In fact, by halfway through the pipeline we won't need any `🐝`s at all and potato will still be able to output the correct value
+Now it has become a more complex and performant bytecode interpreter, which requires far less `🐝`s
 
 ```
-Source → Tokens → Parser (AST) → Scope Tree → IR → Bytecode → VM → Output
+Source → Tokens → Parser (AST) → Desugaring → Semantic Analysis → IR → Bytecode → VM → Output
 ```
-
-> I wrote about tokenization and parsing previously in a blog about [Tree-walking Interpreters](./potato.mdx). However, potato has some ✨fancy new syntax✨ so I'll borrow from those sections here
->
-> If you'd like, you could also skip to [Semantic Analysis](#Semantic-Analysis)
 
 ### Tokenization
 
@@ -70,9 +66,58 @@ PRINT
     └── BOOLEAN
 ```
 
+### Desugaring
+
+As languages grow they tend to introduce shorthand to make writing expressions quicker and easier<sup><a href="#resources">6</a></sup>
+
+For example, in potato if we want to increment a value we need to first sum it with 1 and then assign it back to itself:
+
+```potato
+num is num potato 1
+```
+
+Which is kind of ugly. The answer could be to add a `gains` operator able to handle both addition and assignment:
+
+```potato
+num gains 1
+```
+
+Once we do so we will have to update each step of the language pipeline to understand what to do when it sees this new node. As a language matures this could result in a massive grammar
+
+However, `gains` isn't doing anything that potato doesn't already know how to do. We can avoid maintaining separate logic by replacing instances of `ADD_ASSIGN` AST nodes with `ADD` and `ASSIGN` nodes<sup><a href="#resources">7</a></sup>
+
+```sh
+ADD_ASSIGN              ASSIGN
+├── VARIABLE num        ├── VARIABLE num
+└── NUMBER 1            └── ADD
+                            ├── VARIABLE num
+                            └── NUMBER 1
+```
+
+This is the difference between **core language** (syntax the interpreter understands) and **syntactic sugar** (shorthand)<sup><a href="#resources">7</a></sup>. A desugaring step occurs after parsing to translate sugared nodes into their core form before any later steps have to deal with them
+
+```ruby
+def self.desugar_node(node)
+  case node.type
+  when :add_assign
+    var = node.children[0]
+    value = node.children[1]
+
+    AST::Node.new(:assign, nil, [
+      var,
+      AST::Node.new(:add, nil, [var, value])
+    ], node.line)
+  else
+    # ...
+  end
+end
+```
+
 ### Semantic Analysis
 
-So, the source code has been chopped up, given meaning, and organized into a tree structure. At [the beginning](#top) I presented a snippet of potato code and hypothesized that someone would be able to pick out the amount of unique `🐝` values at a glance. Lets try that again, but from potato's perspective:
+The source code has been chopped up, given meaning, and organized into a tree structure
+
+At [the beginning](#top) I presented a snippet of potato code and hypothesized that someone would be able to pick out the amount of unique `🐝` values at a glance. Lets try that again, but from potato's perspective:
 
 ```sh
 ASSIGN
@@ -88,7 +133,9 @@ FUNC_CALL buzz
 └── STRING honey
 ```
 
-I'd argue it's a bit harder this time. Although the relationship between nodes is expressed we still don't have any information about the relationship between values. This is the point where we need to consider some language design decisions, for instance:
+Although we can see the relationship between _nodes_ we still don't have any information about the relationship between _values_
+
+This is the point where we need to consider some language design decisions, for instance:
 
 - can a variable's value change after assignment? (_mutability_)
 - should we be able to use a variable that has not yet been assigned? (_declaration order_)
@@ -97,167 +144,67 @@ I'd argue it's a bit harder this time. Although the relationship between nodes i
 
 Potato's answers are: yes, no, yes, and yes
 
-Collectively these concepts inform our languages **scoping** and **name resolution**
+Collectively these concepts inform our language's **scoping** and **name resolution**. The semantic analysis step walks the AST and resolves which symbols refer to the same value, tracking where each variable is defined, whether it is local or captured from an outer scope, and raising errors for anything used before it exists
 
-#### Scope Trees
-
-Scope allows us to express what our code should "see" during execution. Nearly all modern languages practice _lexical scoping_, wherein a function or variables scope is determined by where it is defined in the code<sup><a href="#resources">9</a></sup> This is why we are able to intuitively understand what a variables value might be by looking at a code snippet, even in a made up language like potato
-
-> In contrast, _dynamic scoping_ identifiers inherit the scope of whoever called them<sup><a href="#resources">9</a></sup>
-
-Every language has some method of keeping track of a programs scopes and the nodes (soon to be referred to as symbols) that live within in them.<sup><a href="#resources">5</a></sup> Potato uses an unbalanced k-ary tree to represent a programs scopes
-
-Each scope carries a `name`, `parent`, list of `children`, and a `symbol table`. They also provide helpers to get and set symbols
-
-```ruby
-class Scope
-  def initialize(name, parent: nil)
-    @parent = parent
-    @children = []
-    @symbol_table = {}
-    @name = name
-  end
-
-  def add_to_scope(name, kind:, index: nil)
-    return if symbol_table.key?(name)
-    symbol_table[name] = Symbol.new(name, index || next_free_index, kind, nil)
-  end
-
-  def next_free_index
-    symbol_table.size
-  end
-
-  def lookup(name)
-    return symbol_table[name] if symbol_table.key?(name)
-
-    # if not found in current scope, check parent scope
-    parent_lookup = parent&.lookup(name)
-    if parent_lookup
-      add_to_scope(name, kind: :captured, index: parent_lookup.locals_index)
-      return symbol_table[name]
-    end
-  end
-end
-```
-
-Potato's scope tree is built by recursively traversing the AST, creating scope nodes, adding functions and variables to their scope's symbol tree, and raising an error if a symbol is being used within a scope it should not exist in
-
-```ruby
-  class ScopeTree
-    def initialize
-      @global_scope = Scope.new("global")
-      @cur_scope = @global_scope
-    end
-    # ...
-    def scope_node(node)
-      case node.type
-      when :function
-        @cur_scope.add_to_scope(node.value, kind: :function)
-        new_scope = Scope.new(node.value, parent: @cur_scope)
-        @cur_scope.children << new_scope
-        @cur_scope = new_scope
-
-        params_node = node.children[0]
-        body_node = node.children[1]
-        params_node.children.each { |p| @cur_scope.add_to_scope(p.value, kind: :param) }
-        body_node.children.each { |s| scope_node(s) }
-
-        @cur_scope = @cur_scope.parent
-
-      when :assign
-        var_name = node.children[0].value
-        @cur_scope.add_to_scope(var_name, kind: :local)
-        scope_node(node.children[1])
-
-      when :variable
-        if @cur_scope.lookup(node.value).nil?
-          err "Undefined variable: #{node.value}", node.line
-        end
-
-      else
-        node.children.each { |c| scope_node(c) }
-      end
-    end
-  end
-```
-
-The scope tree makes it much more obvious how many `🐝` values are present
+By the end, we'll go from three `🐝`s to two:
 
 ```sh
 global
 ├── 🐝 0 # variable
 └── buzz
-    └── @🐝 0 # @parameter
+    └── @🐝 0 # parameter
 ```
 
-Two `🐝`s, down from three in the AST! The scope tree has _resolved_ that the global `🐝` and parameter `🐝` are distinct symbols that happen to share a name
-
-#### Symbol Tables
-
-Each entry in a scope's symbol table is a **symbol**. A symbol contains everything downstream steps will need to know about it
-
-```ruby
-Symbol = Struct.new(:name, :locals_index, :kind, :bytecode_location)
-```
-
-- `:name` the variable or function name
-- `:kind` whether it's a local, parameter, or captured variable
-- `:locals_index` is the index the where the VM will be able to find the value (names will be gone by the time we get there)
-- `:bytecode_location` later on, functions will use this to store where callers can find them in the bytecode (which is kinda cute!)
-
-We insert values into the symbol table in the order they would be discovered by the execution loop. This paves the way for future steps to drop names entirely and refer to values by index alone
-
-> The semantic analysis step is also responsible for type checking (verifying that operations are performed on compatible types) and generally ensuring that the AST is correct enough to use in later steps<sup><a href="#resources">8</a></sup> ~~I've never written broken code before in my life, so~~ we skip over this
+The semantic analysis step is also responsible for type checking (verifying that operations are performed on compatible types) and generally ensuring that the AST is correct enough to use in later steps<sup><a href="#resources">8</a></sup>
 
 ### Lowering
 
 Tree-walking interpreters only require an AST to execute a program. This is straightforward, but slow. We need to build the AST, traverse, and interpret every time we run our code<sup><a href="#resources">4</a></sup>
 
-Bytecode interpreters avoid this by instead compiling a set of instructions the interpreter can use into, yes, bytecode. This means we only need to do the "hard parts" (tokenization all the way to compilation) once. The interpreter (often referred to here as a VM or bytecode VM) will then be able to execute it continuously without any upfront work<sup><a href="#resources">4</a></sup>
+Bytecode interpreters avoid this by compiling a set of instructions the interpreter can use directly. This means we only need to do the upfront work (tokenization through to compilation) once<sup><a href="#resources">4</a></sup>
 
-> I've said the word bytecode a lot, it just means instructions (basic actions) encoded into binary, often as hexadecimal.<sup><a href="#resources">4</a></sup> Converting our program instructions to bytecode is the responsibility of the compiler, but we're not there yet
+> I've said the word bytecode a lot, it just means instructions (basic actions) encoded into binary, often represented as hexadecimal<sup><a href="#resources">4</a></sup>
 
-These instructions, called Intermediate Representation (IR), attempt to provide the most concise list of actions necessary to execute a program. A language pipeline may include multiple _lowering_ steps wherein the AST is simplified and flattened into linear IR - we'll do this in one go<sup><a href="#resources">1</a></sup>
+These instructions, called **Intermediate Representation (IR)**, express the most concise sequence of actions necessary to execute a program. A language pipeline may include multiple _lowering_ steps wherein the AST is simplified and flattened into linear IR, we'll do this in one pass<sup><a href="#resources">1</a></sup>
 
-In order to run our `🐝` example we'll need: `Push`, `LoadVar`, `LoadCaptured`, `StoreVar`, `Print`, `Call`, `Return`, and `Jump` instructions. One last time we will traverse the AST and, using our scope tree, create our list of TODOs for the VM
+In order to execute our `🐝` example we'll need: `Push`, `LoadVar`, `LoadCaptured`, `StoreVar`, `Print`, `Call`, `Return`, and `Jump` instructions. One last time we traverse the AST and produce a to do list of instructions for the VM
 
 ```ruby
-  case node.type
-  when :function
-    func_ir(node)
+case node.type
+when :function
+  func_ir(node)
 
-  when :string
-    write IR::Push.new(node.value)
+when :string
+  write IR::Push.new(node.value)
 
-  when :print
-    node.children.each { |child| ir(child) }
-    write IR::Print.new
+when :print
+  node.children.each { |child| ir(child) }
+  write IR::Print.new
 
-  when :variable
-    symbol = @cur_scope.lookup(node.value)
+when :variable
+  symbol = @cur_scope.lookup(node.value)
 
-    if symbol.kind == :captured
-      write IR::LoadCaptured.new(symbol.locals_index)
-    else
-      write IR::LoadVar.new(symbol.locals_index)
-    end
+  if symbol.kind == :captured
+    write IR::LoadCaptured.new(symbol.locals_index)
+  else
+    write IR::LoadVar.new(symbol.locals_index)
+  end
 
-  when :assign
-    ir(node.children[1])
-    var_name = node.children[0].value
-    index = @cur_scope.lookup(var_name)&.locals_index
-    write IR::StoreVar.new(index)
+when :assign
+  ir(node.children[1])
+  var_name = node.children[0].value
+  index = @cur_scope.lookup(var_name)&.locals_index
+  write IR::StoreVar.new(index)
 
-  when :func_call
-    node.children.each { |child| ir(child) }
-    write IR::Call.new(@cur_scope.lookup(node.value).bytecode_location, node.children.size)
+when :func_call
+  node.children.each { |child| ir(child) }
+  write IR::Call.new(@cur_scope.lookup(node.value).bytecode_location, node.children.size)
+end
 ```
 
-> Like bytecode, the stack and locals come into play in later stages. For now we can think about the stack as a program's scratch pad (where any "in use" values are stored) and locals as a representation of currently available values, both are lists `[]`
+Variables no longer have names, just indices that tell the VM where to find their values. `StoreVar 0` writes a value to slot 0, so any later `LoadVar 0` will be able to find something there. The VM doesn't need to know anything about the program, it just follows the instructions step by step
 
-At this point any unneeded context has been removed and we are left with a flat list. Variables no longer have names that we can lookup, just an instruction that, when we've written them correctly, will make sure its value is in the right place when another instruction goes looking for it
-
-We've gone from three `🐝`s to two `🐝`s to no `🐝`s:
+We've gone from two `🐝`s to none
 
 ```sh
 <struct Potato::IR::Push value="bumble"> # push to stack
@@ -272,45 +219,48 @@ We've gone from three `🐝`s to two `🐝`s to no `🐝`s:
 
 ### Compiling
 
-As mentioned above, the compiler is responsible for _compiling_ our instructions list into bytecode. Mechanically, this means we need to encode the **opcode** (hexadecimal representing the instruction type) and **operand** (value, or more often, index) into memory or a physical file to be passed along to the VM
+The compiler encodes our instruction list into bytecode: the **opcode** (a byte representing the instruction type) and **operand** (an index or value) written into a binary file to be passed to the VM<sup><a href="#resources">4</a></sup>
 
 ```ruby
-  def self.write(f, opcode, value = nil)
-    f.write([opcode].pack("C"))
-    f.write([value].pack("L>")) if value
-  end
+def self.write(f, opcode, value = nil)
+  f.write([opcode].pack("C"))
+  f.write([value].pack("L>")) if value
+end
+
 # ...
-  case instruction
-  when IR::Push
-    case instruction.value
-    when String
-      write(f, 0x06, instruction.value.bytesize)
-      f.write(instruction.value)
-  when IR::LoadVar
-    write(f, 0x04, instruction.index)
-  when IR::LoadCaptured
-    write(f, 0x0C, instruction.index)
-  when IR::StoreVar
-    write(f, 0x05, instruction.index)
-  when IR::Print
-    write(f, 0x03)
-  when IR::Call
-    write(f, 0x09, instruction.target)
-    f.write([instruction.arg_count].pack("L>"))
-  when IR::Return
-    write(f, 0x0A)
-  when IR::Jump
-    write(f, 0x0B, instruction.target)
+
+case instruction
+when IR::Push
+  case instruction.value
+  when String
+    write(f, 0x06, instruction.value.bytesize)
+    f.write(instruction.value)
   end
+when IR::LoadVar
+  write(f, 0x04, instruction.index)
+when IR::LoadCaptured
+  write(f, 0x0C, instruction.index)
+when IR::StoreVar
+  write(f, 0x05, instruction.index)
+when IR::Print
+  write(f, 0x03)
+when IR::Call
+  write(f, 0x09, instruction.target)
+  f.write([instruction.arg_count].pack("L>"))
+when IR::Return
+  write(f, 0x0A)
+when IR::Jump
+  write(f, 0x0B, instruction.target)
+end
 ```
 
-For example, a `LoadVar` instruction `<struct Potato::IR::LoadVar index=0>` would be represented by the hexadecimal `0x04` and stored alongside the index where we will find the required variable value. Since a number operand requires 4 bytes and the opcode one, each `LoadVar` takes up 5 bytes
+For example, `<struct Potato::IR::LoadVar index=0>` becomes opcode `0x04` followed by a 4-byte operand for the index, 5 bytes total
 
 > hexadecimal uses numbers 0-9 and letters a-f. It's an easier way to write binary, for example: `0x04` in hex is `00000100` in binary<sup><a href="#resources">10</a></sup>
 
 ### Interpreting (VM)
 
-Where in a tree-walking language the interpreter may be the most involved step, a bytecode interpreter (called a VM) has a very straightforward task: read each byte, figure out what instruction it represents, and execute it<sup><a href="#resources">4</a></sup>
+A bytecode VM has a straightforward task: read each byte, and follow the instruction it represents<sup><a href="#resources">4</a></sup>
 
 ```sh
 0600 0000 0662 756d 626c 6505 0000 0000
@@ -318,151 +268,84 @@ Where in a tree-walking language the interpreter may be the most involved step, 
 0568 6f6e 6579 0900 0000 1500 0000 01
 ```
 
-Potato's VM is stack based, which means operations work by pushing values onto and popping them off of the stack. For example, addition works by asking the VM to grab whatever two things are at the front of the stack, add them, and push the result back<sup><a href="#resources">4</a></sup>
+Potato's VM is stack based, which means operations work by pushing and popping values off the stack. For example, addition works by asking the VM to grab whatever two things are at the front of the stack, add them, and push the result back<sup><a href="#resources">4</a></sup>
 
 ```ruby
-stack = [] # the programs memory!
-scopes = [] # this will help us keep track of what scope we're in
-locals = Array.new(100) # I hardcoded this, but normally it would be sized to the amount of locals (values) required by a scope
-
-# ...
-
-  case byte
-  # ...
-  when 0x03 # print
-    puts stack.pop
-  when 0x04 # load variable
-    index = read
-    stack.push(locals[index])
-    err "Unknown variable" if locals[index].nil?
-  when 0x0C # load captured variable
-    index = read
-    parent_locals = scopes.last[:locals]
-    stack.push(parent_locals[index])
-    err "Unknown captured variable" if parent_locals[index].nil?
-  when 0x05 # store var
-    index = read
-    value = stack.pop
-    locals[index] = value
-  when 0x06 # string
-    length = read
-    value = @bytecode[@pos, length].pack("C*")
-    @pos += length
-    stack.push(value)
-  when 0x09 # call
-    target = read
-    arg_count = read
-    scopes.push({ locals: locals, call_site: @pos })
-    locals = Array.new(100)
-    args = stack.pop(arg_count)
-    args.each_with_index { |arg, i| locals[i] = arg }
-    @pos = target
-  when 0x0A # return
-    scope = scopes.pop
-    locals = scope[:locals]
-    @pos = scope[:call_site]
-  when 0x0B # jump
-    @pos = read
-  end
+case byte
+when 0x03 # print
+  puts stack.pop
+when 0x04 # load variable
+  index = read
+  stack.push(locals[index])
+when 0x0C # load captured variable
+  index = read
+  parent_locals = scopes.last[:locals]
+  stack.push(parent_locals[index])
+when 0x05 # store var
+  index = read
+  locals[index] = stack.pop
+when 0x06 # string
+  length = read
+  value = @bytecode[@pos, length].pack("C*")
+  @pos += length
+  stack.push(value)
+when 0x09 # call
+  target = read
+  arg_count = read
+  scopes.push({ locals: locals, call_site: @pos })
+  locals = Array.new(size_of_cur_frame)
+  args = stack.pop(arg_count)
+  args.each_with_index { |arg, i| locals[i] = arg }
+  @pos = target
+when 0x0A # return
+  scope = scopes.pop
+  locals = scope[:locals]
+  @pos = scope[:call_site]
+when 0x0B # jump
+  @pos = read
+end
 ```
 
-> Bytecode isn't converted back into instructions, it remains as is after the compilation step. However, I'm going to show the IR equivalent alongside the opcode for readability
+Stepping through the `🐝` example:
 
 ```sh
 0x06 Push value="bumble"
-# s ["bumble"] l []
+# stack: ["bumble"]  locals: []
 
 0x05 StoreVar index=0
-# s [] l ["bumble"]
+# stack: []  locals: ["bumble"]
 
 0x0B Jump target=28
 
 0x06 Push value="honey"
-# s ["honey"] l ["bumble"]
+# stack: ["honey"]  locals: ["bumble"]
 
 0x09 Call target=21, arg_count=1
-# move into a new local scope
-# add remaining stack to locals
-# s [] l ["honey"]
+# new frame, the arg is moved to locals
+# stack: []  locals: ["honey"]
 
 0x04 LoadVar index=0
-# s ["honey"] l ["honey"]
+# stack: ["honey"]  locals: ["honey"]
 
 0x03 Print
-# s [] l ["honey"] > "honey"
+# > "honey"
 
 0x0A Return
-# move back into parent scope
-# s [] l ["bumble"]
+# move back to parent frame
+# stack: []  locals: ["bumble"]
 ```
 
-There it is! 🎉 After quite a bit of chopping up, rearranging, connecting, and translating our code `honey` is printed to the terminal
-
-### Bonus: Desugaring
-
-> This step occurs after [Parsing](#parsing), I just feel the section makes more sense thematically at the end
-
-As Languages grow they tend to introduce shorthand to make writing expressions quicker and easier <sup><a href="#resources">6</a></sup>
-
-For example, in potato if we want to increment a value we will need to first sum it with 1 and then assign it back to itself, like:
-
-```potato
-num is num potato 1
-```
-
-Which is.. kind of ugly. The answer could be to add a `gains` operator able to handle both addition and assignment
-
-```potato
-num gains 1
-```
-
-Once we do so we will have to update each step of the language pipeline to understand what to do when it sees this new node. As a language matures this could result in a massive grammar
-
-However, our new `gains` operator isn't doing anything that potato doesn't already know how to do. We could avoid having to maintain separate logic by simply replacing instances of `ADD_ASSIGN` AST nodes with `ADD` and `ASSIGN` nodes<sup><a href="#resources">7</a></sup>
-
-```sh
-ADD_ASSIGN
-├── VARIABLE num
-└── NUMBER 1
-```
-
-```sh
-ASSIGN
-├── VARIABLE num
-└── ADD
-    ├── VARIABLE num
-    └── NUMBER 1
-```
-
-This is the difference between **core language** (syntax the interpreter understands) and **syntactic sugar** (shorthand)<sup><a href="#resources">7</a></sup>
-
-A desugaring step may occur after parsing to translate _sugared_ nodes into their _core_ form<sup><a href="#resources">7</a></sup>
-
-```ruby
-def self.desugar_node(node)
-  case node.type
-  when :add_assign # convert add_assign nodes to assign, add
-    var = node.children[0]
-    value = node.children[1]
-
-    AST::Node.new(:assign, nil, [ var,
-      AST::Node.new(:add, nil, [var, value])
-    ], node.line)
-  else
-  # ...
-  end
-end
-```
+There it is! 🎉 After quite a bit of chopping up, rearranging, and translating, `honey` is printed to the terminal
 
 ### TLDR;
 
 As code authors we might want to write a ton of `🐝`s, and that's okay! We can have as many `🐝`s as we want because the language pipeline will remove everything it doesn't need as soon as it doesn't need it
 
 ```
-Source → Tokens → AST → Scope Tree → IR → Bytecode → VM → Output
+Source → Tokens → AST → Desugaring → Semantic Analysis → IR → Bytecode → VM → Output
 ```
 
-- **Scope Trees**: Who are these things and where do they live?
+- **Semantic Analysis**: Who are these things and where do they live?
 - **IR**: What do we need to do, in what order?
 - **Bytecode**: How can we say all that.. but smaller?
 - **VM**: Read tiny instructions, execute, repeat
